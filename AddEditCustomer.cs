@@ -1,4 +1,5 @@
-﻿using jordan_rowland_c969.Services;
+﻿using jordan_rowland_c969.Database;
+using jordan_rowland_c969.Services;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -14,17 +15,28 @@ namespace jordan_rowland_c969
     public partial class AddEditCustomer : Form
     {
         bool EditMode = false;
+        int customerId {  get; set; }
+        Global g { get; set; }
 
-        public AddEditCustomer()
+        public AddEditCustomer(Global global)
         {
+            g = global;
             InitializeComponent();
         }
 
-        //public AddEditCustomer(Customer customer)
-        //{
-        //    InitializeComponent();
-        //    EditMode = true;
-        //}
+        public AddEditCustomer(Global global, Services.Customer customer)
+        {
+            g = global;
+            InitializeComponent();
+            EditMode = true;
+            customerId = customer.Id;
+            lbl_Title.Text = "Update Customer";
+            txt_Name.Text = customer.Name;
+            txt_Address.Text = customer.Address;
+            txt_City.Text = customer.City;
+            txt_Country.Text = customer.Country;
+            txt_PhoneNumber.Text = customer.Phone;
+        }
 
         private void btn_Save_Click(object sender, EventArgs e)
         {
@@ -37,16 +49,21 @@ namespace jordan_rowland_c969
                 {"phoneNumber", txt_PhoneNumber.Text},
             };
 
-            Customer customer = new Customer()
+            Services.Customer customer = new Services.Customer()
             {
                 Name = txt_Name.Text,
                 Address = txt_Address.Text,
                 City = txt_City.Text,
                 Country = txt_Country.Text,
-                PhoneNumber = txt_PhoneNumber.Text,
+                Phone = txt_PhoneNumber.Text,
             };
 
-            customer.Create();
+            if (EditMode)
+            {
+                customer.Id = customerId;
+                customer.Update(g);
+            }
+            else customer.Create(g);
             Close();
 
         }

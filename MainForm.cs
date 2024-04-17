@@ -26,25 +26,31 @@ namespace jordan_rowland_c969
     public partial class MainForm : Form
     {
 
-        //Global Global { get; set; } = new Global() { User = (1, "test") };
-        Global Global { get; set; }
+        Global Global { get; set; } = new Global() { User = (1, "test") };
+        //Global Global { get; set; }  // Keep this
 
         public MainForm(Global global)
         {
-            Global = global;
-            // DO NOT DELETE, NEED THIS
-            using (LoginForm loginForm = new LoginForm(DBConnection.Conn, Global))
-            {
-                loginForm.ShowDialog();
-                if (!loginForm.LoginSuccessful) Environment.Exit(0);
-                Global = loginForm.Global;
-            }
+            //Global = global;
+            //// DO NOT DELETE, NEED THIS
+            //using (LoginForm loginForm = new LoginForm(DBConnection.Conn, Global))
+            //{
+            //    loginForm.ShowDialog();
+            //    if (!loginForm.LoginSuccessful) Environment.Exit(0);
+            //    Global = loginForm.Global;
+            //}
             InitializeComponent();
             txt_User.Text = $"Logged in as: {Global.User.Username}";
 
             FillDataGrid(dg_Customers, "customer");
             FillDataGrid(dg_Appointments, "appointment");
 
+            dg_Customers.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dg_Appointments.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dg_Customers.AllowUserToAddRows = false;
+            dg_Appointments.AllowUserToAddRows = false;
+            dg_Customers.ReadOnly = true;
+            dg_Appointments.ReadOnly = true;
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -66,7 +72,8 @@ namespace jordan_rowland_c969
 
         private void btn_AddCustomer_Click(object sender, EventArgs e)
         {
-            AddEditCustomer addEditCustomer = new AddEditCustomer();
+            // phone number should only have digits and dashes
+            AddEditCustomer addEditCustomer = new AddEditCustomer(Global);
             addEditCustomer.ShowDialog();
             FillDataGrid(dg_Customers, "customer");
         }
@@ -74,13 +81,32 @@ namespace jordan_rowland_c969
         private void btn_UpdateCustomer_Click(object sender, EventArgs e)
         {
             // Get customer and pass in to form
-            AddEditCustomer addEditCustomer = new AddEditCustomer();
+            // phone number should only have digits and dashes
+            int id = (int)dg_Customers.SelectedRows[0].Cells["customerId"].Value;
+            Services.Customer customer = Services.Customer.GetCustomer(id);
+            AddEditCustomer addEditCustomer = new AddEditCustomer(Global, customer);
             addEditCustomer.ShowDialog();
+            FillDataGrid(dg_Customers, "customer");
         }
 
         private void btn_DeleteCustomer_Click(object sender, EventArgs e)
         {
-
+            try
+            {
+                int id = (int)dg_Customers.SelectedRows[0].Cells["CustomerId"].Value;
+                string message = "Delete customer?";
+                string caption = "Click Yes or No to confirm";
+                MessageBoxButtons buttons = MessageBoxButtons.YesNo;
+                DialogResult result;
+                result = MessageBox.Show(message, caption, buttons);
+                if (result == System.Windows.Forms.DialogResult.Yes) Services.Customer.Delete(id);
+                FillDataGrid(dg_Customers, "customer");
+            }
+            catch
+            {
+                // Probably need to account for other errors
+                MessageBox.Show("No Customer selected");
+            }
         }
 
         private void btn_AddAppointment_Click(object sender, EventArgs e)
@@ -95,11 +121,12 @@ namespace jordan_rowland_c969
             // Get appointment and pass in to form
             AddEditAppointment addEditAppointment = new AddEditAppointment();
             addEditAppointment.ShowDialog();
+            FillDataGrid(dg_Appointments, "appointment");
         }
 
         private void btn_DeleteAppointment_Click(object sender, EventArgs e)
         {
-
+            FillDataGrid(dg_Appointments, "appointment");
         }
 
         private void btn_All_Click(object sender, EventArgs e)

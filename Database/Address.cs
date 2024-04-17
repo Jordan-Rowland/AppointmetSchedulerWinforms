@@ -10,53 +10,34 @@ namespace jordan_rowland_c969.Database
 {
     public static class Address
     {
-        //public static AddressStruct getAddress(int addressId)
-        //{
-
-        //}
-
-        public static void Create()
+        public static int Create(Global g, string address, int cityId, string phone)
         {
             using (MySqlCommand cmd = new MySqlCommand(
-                "INSERT INTO customer (" +
-                // Update to insert correct values for loggedin user
-                "customerName, addressId, active, createDate, createdBy, lastUpdate, lastUpdateBy" +
+                "INSERT INTO address (" +
+                "address, address2, cityId, postalCode, phone, createDate, createdBy, lastUpdate, lastUpdateBy" +
                 ") VALUES (" +
-                "@customerName, @addressId, 1, @createDate, @createdBy, @lastUpdate, @lastUpdateBy" +
+                "@address, '', @cityId, '', @phone, @createDate, @createdBy, @lastUpdate, @lastUpdateBy" +
                 ")",
                 DBConnection.Conn))
             {
-                //cmd.Parameters.Add("@customerName", MySqlDbType.VarChar, 50).Value = customer.Name;
-                cmd.Parameters.Add("@addressId", MySqlDbType.Int32).Value = 1;
+                cmd.Parameters.Add("@address", MySqlDbType.VarChar, 50).Value = address;
+                cmd.Parameters.Add("@cityId", MySqlDbType.Int32).Value = cityId;
+                cmd.Parameters.Add("@phone", MySqlDbType.VarChar, 50).Value = phone;
                 cmd.Parameters.Add("@createDate", MySqlDbType.DateTime).Value = DateTime.UtcNow;
-                cmd.Parameters.Add("@createdBy", MySqlDbType.VarChar, 50).Value = "test";
+                cmd.Parameters.Add("@createdBy", MySqlDbType.VarChar, 50).Value = g.User.Username;
                 cmd.Parameters.Add("@lastUpdate", MySqlDbType.DateTime).Value = DateTime.UtcNow;
-                cmd.Parameters.Add("@lastUpdateBy", MySqlDbType.VarChar, 50).Value = "test";
+                cmd.Parameters.Add("@lastUpdateBy", MySqlDbType.VarChar, 50).Value = g.User.Username;
                 cmd.ExecuteNonQuery();
-                //return true;
             }
+            MySqlCommand query = new MySqlCommand(
+                $"SELECT addressId FROM address ORDER BY addressId DESC",
+                DBConnection.Conn);
+            MySqlDataReader reader = query.ExecuteReader();
+
+            reader.Read();
+            int result = reader.GetInt32(0);
+            reader.Close();
+            return result;
         }
-
     }
-
-        //public struct AddressStruct
-        //{
-        //    public int Id { get; set; }
-        //    public string Address { get; set; }
-        //    public string Address2 { get; set; }
-        //    public int CityId { get; set; }
-        //    public string PostalCode { get; set; }
-        //    public string Phone { get; set; }
-
-        //public AddressStruct(int id, string address, string address2,
-        //    int cityId, string postalCode, string phone)
-        //{
-        //    Id = id;
-        //    Address = address;
-        //    Address2 = address2;
-        //    CityId = cityId;
-        //    PostalCode = postalCode;
-        //    Phone = phone;
-        //}
-    //}
 }

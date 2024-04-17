@@ -20,11 +20,11 @@ namespace jordan_rowland_c969
         public Global Global { get; set; }
         public bool LoginSuccessful { get; set; }
 
-        internal LoginForm(MySqlConnection conn, Global global)
+        internal LoginForm(MySqlConnection conn, Global g)
         {
             InitializeComponent();
             Conn = conn;
-            Global = global;
+            Global = g;
         }
 
         private void LoginForm_Load(object sender, EventArgs e)

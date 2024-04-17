@@ -1,4 +1,5 @@
-﻿using System;
+﻿using jordan_rowland_c969.Database;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,21 +15,31 @@ namespace jordan_rowland_c969.Services
         public string Address { get; set; }
         public string City { get; set; }
         public string Country { get; set; }
-        public string PhoneNumber { get; set; }
+        public string Phone { get; set; }
 
-        public void Create() => // Capture the exception if it bubbles up
-            Database.Customer.Create(this);
+        public void Create(Global g) => // Capture the exception if it bubbles up
+            Database.Customer.Create(g, this);
 
+        public static Customer GetCustomer(int customerId)
+        {
+            // Capture the exception if it bubbles up
+            CustomerStruct customerStruct = Database.Customer.GetCustomer(customerId);
+            return new Customer()
+            {
+                Id = customerStruct.Id,
+                Name = customerStruct.Name,
+                Address = customerStruct.Address,
+                City = customerStruct.City,
+                Country = customerStruct.Country,
+                Phone = customerStruct.Phone,
+            };
+        }
 
-        //public static bool Create(Dictionary<string, string> customerData)
-        //{
-        //    Customer customer = new Customer()
-        //    {
+        public void Update(Global g) => // Capture the exception if it bubbles up
+            Database.Customer.Update(g, this);
 
-        //    }
-        //    return Database.Customer.Create(customer);
-        //}
-
+        public static void Delete(int customerId) => // Capture the exception if it bubbles up
+            Database.Customer.Delete(customerId);
     }
 
 }

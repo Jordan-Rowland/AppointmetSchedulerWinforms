@@ -10,7 +10,7 @@ namespace jordan_rowland_c969.Services
 {
     public static class Login
     {
-        internal static (bool result, Global global) ValidateLogin(
+        internal static (bool result, Global g) ValidateLogin(
             MySqlConnection conn, string username, string password)
         {
             MySqlCommand query = new MySqlCommand(
@@ -21,7 +21,7 @@ namespace jordan_rowland_c969.Services
             query.Parameters.AddWithValue("@password", password);
             MySqlDataReader reader = query.ExecuteReader();
 
-            (bool result, Global global) results = (false, new Global());
+            (bool result, Global g) results = (false, new Global());
             if (reader.Read())
             {
                 results = (true, new Global() {
