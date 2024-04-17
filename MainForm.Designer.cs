@@ -28,136 +28,143 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.dataGridView2 = new System.Windows.Forms.DataGridView();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
-            this.button5 = new System.Windows.Forms.Button();
-            this.button6 = new System.Windows.Forms.Button();
-            this.button7 = new System.Windows.Forms.Button();
-            this.button8 = new System.Windows.Forms.Button();
-            this.button9 = new System.Windows.Forms.Button();
+            this.dg_Customers = new System.Windows.Forms.DataGridView();
+            this.dg_Appointments = new System.Windows.Forms.DataGridView();
+            this.btn_DeleteCustomer = new System.Windows.Forms.Button();
+            this.btn_UpdateCustomer = new System.Windows.Forms.Button();
+            this.btn_AddCustomer = new System.Windows.Forms.Button();
+            this.btn_AddAppointment = new System.Windows.Forms.Button();
+            this.btn_UpdateAppointment = new System.Windows.Forms.Button();
+            this.btn_DeleteAppointment = new System.Windows.Forms.Button();
+            this.btn_Weekly = new System.Windows.Forms.Button();
+            this.btn_Monthly = new System.Windows.Forms.Button();
+            this.btn_All = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.txt_User = new System.Windows.Forms.Label();
             this.btn_Exit = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dg_Customers)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dg_Appointments)).BeginInit();
             this.SuspendLayout();
             // 
-            // dataGridView1
+            // dg_Customers
             // 
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(12, 114);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.RowHeadersWidth = 51;
-            this.dataGridView1.RowTemplate.Height = 24;
-            this.dataGridView1.Size = new System.Drawing.Size(1049, 207);
-            this.dataGridView1.TabIndex = 0;
+            this.dg_Customers.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dg_Customers.Location = new System.Drawing.Point(12, 114);
+            this.dg_Customers.Name = "dg_Customers";
+            this.dg_Customers.RowHeadersWidth = 51;
+            this.dg_Customers.RowTemplate.Height = 24;
+            this.dg_Customers.Size = new System.Drawing.Size(1049, 207);
+            this.dg_Customers.TabIndex = 0;
             // 
-            // dataGridView2
+            // dg_Appointments
             // 
-            this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView2.Location = new System.Drawing.Point(12, 436);
-            this.dataGridView2.Name = "dataGridView2";
-            this.dataGridView2.RowHeadersWidth = 51;
-            this.dataGridView2.RowTemplate.Height = 24;
-            this.dataGridView2.Size = new System.Drawing.Size(1049, 207);
-            this.dataGridView2.TabIndex = 1;
+            this.dg_Appointments.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dg_Appointments.Location = new System.Drawing.Point(12, 436);
+            this.dg_Appointments.Name = "dg_Appointments";
+            this.dg_Appointments.RowHeadersWidth = 51;
+            this.dg_Appointments.RowTemplate.Height = 24;
+            this.dg_Appointments.Size = new System.Drawing.Size(1049, 207);
+            this.dg_Appointments.TabIndex = 1;
             // 
-            // button1
+            // btn_DeleteCustomer
             // 
-            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.Location = new System.Drawing.Point(886, 327);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(175, 40);
-            this.button1.TabIndex = 2;
-            this.button1.Text = "Delete Customer";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.btn_DeleteCustomer.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_DeleteCustomer.Location = new System.Drawing.Point(917, 327);
+            this.btn_DeleteCustomer.Name = "btn_DeleteCustomer";
+            this.btn_DeleteCustomer.Size = new System.Drawing.Size(144, 40);
+            this.btn_DeleteCustomer.TabIndex = 2;
+            this.btn_DeleteCustomer.Text = "Delete";
+            this.btn_DeleteCustomer.UseVisualStyleBackColor = true;
+            this.btn_DeleteCustomer.Click += new System.EventHandler(this.btn_DeleteCustomer_Click);
             // 
-            // button2
+            // btn_UpdateCustomer
             // 
-            this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button2.Location = new System.Drawing.Point(692, 327);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(188, 40);
-            this.button2.TabIndex = 3;
-            this.button2.Text = "Update Customer";
-            this.button2.UseVisualStyleBackColor = true;
+            this.btn_UpdateCustomer.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_UpdateCustomer.Location = new System.Drawing.Point(767, 327);
+            this.btn_UpdateCustomer.Name = "btn_UpdateCustomer";
+            this.btn_UpdateCustomer.Size = new System.Drawing.Size(144, 40);
+            this.btn_UpdateCustomer.TabIndex = 3;
+            this.btn_UpdateCustomer.Text = "Update";
+            this.btn_UpdateCustomer.UseVisualStyleBackColor = true;
+            this.btn_UpdateCustomer.Click += new System.EventHandler(this.btn_UpdateCustomer_Click);
             // 
-            // button3
+            // btn_AddCustomer
             // 
-            this.button3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button3.Location = new System.Drawing.Point(523, 327);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(163, 40);
-            this.button3.TabIndex = 4;
-            this.button3.Text = "Add Customer";
-            this.button3.UseVisualStyleBackColor = true;
+            this.btn_AddCustomer.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_AddCustomer.Location = new System.Drawing.Point(617, 327);
+            this.btn_AddCustomer.Name = "btn_AddCustomer";
+            this.btn_AddCustomer.Size = new System.Drawing.Size(144, 40);
+            this.btn_AddCustomer.TabIndex = 4;
+            this.btn_AddCustomer.Text = "Add";
+            this.btn_AddCustomer.UseVisualStyleBackColor = true;
+            this.btn_AddCustomer.Click += new System.EventHandler(this.btn_AddCustomer_Click);
             // 
-            // button4
+            // btn_AddAppointment
             // 
-            this.button4.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button4.Location = new System.Drawing.Point(523, 649);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(163, 40);
-            this.button4.TabIndex = 7;
-            this.button4.Text = "Add Appointment";
-            this.button4.UseVisualStyleBackColor = true;
+            this.btn_AddAppointment.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_AddAppointment.Location = new System.Drawing.Point(617, 649);
+            this.btn_AddAppointment.Name = "btn_AddAppointment";
+            this.btn_AddAppointment.Size = new System.Drawing.Size(144, 40);
+            this.btn_AddAppointment.TabIndex = 7;
+            this.btn_AddAppointment.Text = "Add";
+            this.btn_AddAppointment.UseVisualStyleBackColor = true;
+            this.btn_AddAppointment.Click += new System.EventHandler(this.btn_AddAppointment_Click);
             // 
-            // button5
+            // btn_UpdateAppointment
             // 
-            this.button5.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button5.Location = new System.Drawing.Point(692, 649);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(188, 40);
-            this.button5.TabIndex = 6;
-            this.button5.Text = "Update Appointment";
-            this.button5.UseVisualStyleBackColor = true;
+            this.btn_UpdateAppointment.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_UpdateAppointment.Location = new System.Drawing.Point(769, 649);
+            this.btn_UpdateAppointment.Name = "btn_UpdateAppointment";
+            this.btn_UpdateAppointment.Size = new System.Drawing.Size(142, 40);
+            this.btn_UpdateAppointment.TabIndex = 6;
+            this.btn_UpdateAppointment.Text = "Update";
+            this.btn_UpdateAppointment.UseVisualStyleBackColor = true;
+            this.btn_UpdateAppointment.Click += new System.EventHandler(this.btn_UpdateAppointment_Click);
             // 
-            // button6
+            // btn_DeleteAppointment
             // 
-            this.button6.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button6.Location = new System.Drawing.Point(886, 649);
-            this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(175, 40);
-            this.button6.TabIndex = 5;
-            this.button6.Text = "Delete Appointment";
-            this.button6.UseVisualStyleBackColor = true;
-            this.button6.Click += new System.EventHandler(this.button6_Click);
+            this.btn_DeleteAppointment.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_DeleteAppointment.Location = new System.Drawing.Point(917, 649);
+            this.btn_DeleteAppointment.Name = "btn_DeleteAppointment";
+            this.btn_DeleteAppointment.Size = new System.Drawing.Size(144, 40);
+            this.btn_DeleteAppointment.TabIndex = 5;
+            this.btn_DeleteAppointment.Text = "Delete";
+            this.btn_DeleteAppointment.UseVisualStyleBackColor = true;
+            this.btn_DeleteAppointment.Click += new System.EventHandler(this.btn_DeleteAppointment_Click);
             // 
-            // button7
+            // btn_Weekly
             // 
-            this.button7.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button7.Location = new System.Drawing.Point(12, 649);
-            this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(132, 40);
-            this.button7.TabIndex = 8;
-            this.button7.Text = "View Weekly";
-            this.button7.UseVisualStyleBackColor = true;
+            this.btn_Weekly.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_Weekly.Location = new System.Drawing.Point(12, 649);
+            this.btn_Weekly.Name = "btn_Weekly";
+            this.btn_Weekly.Size = new System.Drawing.Size(147, 40);
+            this.btn_Weekly.TabIndex = 8;
+            this.btn_Weekly.Text = "View Weekly";
+            this.btn_Weekly.UseVisualStyleBackColor = true;
+            this.btn_Weekly.Click += new System.EventHandler(this.btn_Weekly_Click);
             // 
-            // button8
+            // btn_Monthly
             // 
-            this.button8.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button8.Location = new System.Drawing.Point(150, 649);
-            this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(132, 40);
-            this.button8.TabIndex = 9;
-            this.button8.Text = "View Monthly";
-            this.button8.UseVisualStyleBackColor = true;
+            this.btn_Monthly.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_Monthly.Location = new System.Drawing.Point(165, 649);
+            this.btn_Monthly.Name = "btn_Monthly";
+            this.btn_Monthly.Size = new System.Drawing.Size(147, 40);
+            this.btn_Monthly.TabIndex = 9;
+            this.btn_Monthly.Text = "View Monthly";
+            this.btn_Monthly.UseVisualStyleBackColor = true;
+            this.btn_Monthly.Click += new System.EventHandler(this.btn_Monthly_Click);
             // 
-            // button9
+            // btn_All
             // 
-            this.button9.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button9.Location = new System.Drawing.Point(288, 649);
-            this.button9.Name = "button9";
-            this.button9.Size = new System.Drawing.Size(132, 40);
-            this.button9.TabIndex = 10;
-            this.button9.Text = "View All";
-            this.button9.UseVisualStyleBackColor = true;
+            this.btn_All.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_All.Location = new System.Drawing.Point(318, 649);
+            this.btn_All.Name = "btn_All";
+            this.btn_All.Size = new System.Drawing.Size(147, 40);
+            this.btn_All.TabIndex = 10;
+            this.btn_All.Text = "View All";
+            this.btn_All.UseVisualStyleBackColor = true;
+            this.btn_All.Click += new System.EventHandler(this.btn_All_Click);
             // 
             // label1
             // 
@@ -209,22 +216,22 @@
             this.Controls.Add(this.txt_User);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.button9);
-            this.Controls.Add(this.button8);
-            this.Controls.Add(this.button7);
-            this.Controls.Add(this.button4);
-            this.Controls.Add(this.button5);
-            this.Controls.Add(this.button6);
-            this.Controls.Add(this.button3);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.dataGridView2);
-            this.Controls.Add(this.dataGridView1);
+            this.Controls.Add(this.btn_All);
+            this.Controls.Add(this.btn_Monthly);
+            this.Controls.Add(this.btn_Weekly);
+            this.Controls.Add(this.btn_AddAppointment);
+            this.Controls.Add(this.btn_UpdateAppointment);
+            this.Controls.Add(this.btn_DeleteAppointment);
+            this.Controls.Add(this.btn_AddCustomer);
+            this.Controls.Add(this.btn_UpdateCustomer);
+            this.Controls.Add(this.btn_DeleteCustomer);
+            this.Controls.Add(this.dg_Appointments);
+            this.Controls.Add(this.dg_Customers);
             this.Name = "MainForm";
             this.Text = "Main";
             this.Load += new System.EventHandler(this.Form1_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dg_Customers)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dg_Appointments)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -232,17 +239,17 @@
 
         #endregion
 
-        private System.Windows.Forms.DataGridView dataGridView1;
-        private System.Windows.Forms.DataGridView dataGridView2;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Button button4;
-        private System.Windows.Forms.Button button5;
-        private System.Windows.Forms.Button button6;
-        private System.Windows.Forms.Button button7;
-        private System.Windows.Forms.Button button8;
-        private System.Windows.Forms.Button button9;
+        private System.Windows.Forms.DataGridView dg_Customers;
+        private System.Windows.Forms.DataGridView dg_Appointments;
+        private System.Windows.Forms.Button btn_DeleteCustomer;
+        private System.Windows.Forms.Button btn_UpdateCustomer;
+        private System.Windows.Forms.Button btn_AddCustomer;
+        private System.Windows.Forms.Button btn_AddAppointment;
+        private System.Windows.Forms.Button btn_UpdateAppointment;
+        private System.Windows.Forms.Button btn_DeleteAppointment;
+        private System.Windows.Forms.Button btn_Weekly;
+        private System.Windows.Forms.Button btn_Monthly;
+        private System.Windows.Forms.Button btn_All;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label txt_User;
         private System.Windows.Forms.Button btn_Exit;

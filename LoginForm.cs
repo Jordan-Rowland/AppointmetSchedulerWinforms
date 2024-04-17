@@ -43,5 +43,10 @@ namespace jordan_rowland_c969
                 Close();
             }
         }
+
+        private void btn_Exit_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
     }
 }

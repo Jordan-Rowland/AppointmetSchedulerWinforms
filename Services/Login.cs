@@ -29,6 +29,7 @@ namespace jordan_rowland_c969.Services
                     Username = reader.GetString(1),
                 });
             }
+            // TODO: Throw an exception here instead 
             reader.Close();
             return (false, new User());
         }

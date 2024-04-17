@@ -18,7 +18,7 @@ namespace jordan_rowland_c969
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             DBConnection.StartConnection();
-            Application.Run(new MainForm(DBConnection.conn));
+            Application.Run(new MainForm(DBConnection.Conn));
             DBConnection.CloseConnection();
         }
     }
