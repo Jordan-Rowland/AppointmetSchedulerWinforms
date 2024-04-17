@@ -16,7 +16,8 @@ namespace jordan_rowland_c969.Services
         public string Country { get; set; }
         public string PhoneNumber { get; set; }
 
-        public bool Create() => Database.Customer.Create(this);
+        public void Create() => // Capture the exception if it bubbles up
+            Database.Customer.Create(this);
 
 
         //public static bool Create(Dictionary<string, string> customerData)

@@ -18,7 +18,8 @@ namespace jordan_rowland_c969
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             DBConnection.StartConnection();
-            Application.Run(new MainForm(DBConnection.Conn));
+            Global Global = new Global() { User = (0, "ERROR") };
+            Application.Run(new MainForm(Global));
             DBConnection.CloseConnection();
         }
     }

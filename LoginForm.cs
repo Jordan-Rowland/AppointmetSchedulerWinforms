@@ -17,13 +17,14 @@ namespace jordan_rowland_c969
     public partial class LoginForm : Form
     {
         MySqlConnection Conn { get; }
-        public User CurrentUser { get; set; }
+        public Global Global { get; set; }
         public bool LoginSuccessful { get; set; }
 
-        internal LoginForm(MySqlConnection conn)
+        internal LoginForm(MySqlConnection conn, Global global)
         {
             InitializeComponent();
             Conn = conn;
+            Global = global;
         }
 
         private void LoginForm_Load(object sender, EventArgs e)
@@ -33,12 +34,12 @@ namespace jordan_rowland_c969
 
         private void btn_Login_Click(object sender, EventArgs e)
         {
-            (bool result, User user) = Services.Login.ValidateLogin(Conn, txt_Username.Text, txt_Password.Text);
+            (bool result, Global global) = Services.Login.ValidateLogin(Conn, txt_Username.Text, txt_Password.Text);
             
             if (!result) MessageBox.Show("Username or Password is incorrect");
             else
             {
-                CurrentUser = user;
+                Global = global;
                 LoginSuccessful = true;
                 Close();
             }

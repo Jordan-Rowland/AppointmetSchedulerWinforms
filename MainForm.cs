@@ -17,6 +17,8 @@ using jordan_rowland_c969.Services;
 using MySql.Data;
 using MySql.Data.MySqlClient;
 using MySqlX.XDevAPI;
+using MySqlX.XDevAPI.Relational;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 
 namespace jordan_rowland_c969
@@ -24,21 +26,24 @@ namespace jordan_rowland_c969
     public partial class MainForm : Form
     {
 
-        User CurrentUser { get; set; } = new User() { Id = 1, Username = "test" };
+        //Global Global { get; set; } = new Global() { User = (1, "test") };
+        Global Global { get; set; }
 
-        public MainForm(MySqlConnection conn)
+        public MainForm(Global global)
         {
-            //using (LoginForm loginForm = new LoginForm(conn))
-            //{
-            //    loginForm.ShowDialog();
-            //    if (!loginForm.LoginSuccessful) Environment.Exit(0);
-            //    CurrentUser = loginForm.CurrentUser;
-            //}
+            Global = global;
+            // DO NOT DELETE, NEED THIS
+            using (LoginForm loginForm = new LoginForm(DBConnection.Conn, Global))
+            {
+                loginForm.ShowDialog();
+                if (!loginForm.LoginSuccessful) Environment.Exit(0);
+                Global = loginForm.Global;
+            }
             InitializeComponent();
-            txt_User.Text = $"Logged in as: {CurrentUser.Username}";
+            txt_User.Text = $"Logged in as: {Global.User.Username}";
 
-            FillCustomerDataGrid();
-            FillAppointmentDataGrid();
+            FillDataGrid(dg_Customers, "customer");
+            FillDataGrid(dg_Appointments, "appointment");
 
         }
 
@@ -47,26 +52,14 @@ namespace jordan_rowland_c969
 
         }
 
-        private void FillCustomerDataGrid()
+        private void FillDataGrid(DataGridView dataGrid, string table)
         {
             MySqlDataAdapter adp;
             DataTable dt;
-            adp = new MySqlDataAdapter(
-                new MySqlCommand("SELECT * FROM customer", DBConnection.Conn));
+            adp = new MySqlDataAdapter(new MySqlCommand($"SELECT * FROM {table}", DBConnection.Conn));
             dt = new DataTable();
             adp.Fill(dt);
-            dg_Customers.DataSource = dt;
-        }
-
-        private void FillAppointmentDataGrid()
-        {
-            MySqlDataAdapter adp;
-            DataTable dt;
-            adp = new MySqlDataAdapter(
-                new MySqlCommand("SELECT * FROM appointment", DBConnection.Conn));
-            dt = new DataTable();
-            adp.Fill(dt);
-            dg_Appointments.DataSource = dt;
+            dataGrid.DataSource = dt;
         }
 
         private void btn_Exit_Click(object sender, EventArgs e) => Close();
@@ -75,8 +68,7 @@ namespace jordan_rowland_c969
         {
             AddEditCustomer addEditCustomer = new AddEditCustomer();
             addEditCustomer.ShowDialog();
-            FillCustomerDataGrid();
-            //dg_Customers.Refresh();
+            FillDataGrid(dg_Customers, "customer");
         }
 
         private void btn_UpdateCustomer_Click(object sender, EventArgs e)
@@ -95,6 +87,7 @@ namespace jordan_rowland_c969
         {
             AddEditAppointment addEditAppointment = new AddEditAppointment();
             addEditAppointment.ShowDialog();
+            FillDataGrid(dg_Appointments, "appointment");
         }
 
         private void btn_UpdateAppointment_Click(object sender, EventArgs e)

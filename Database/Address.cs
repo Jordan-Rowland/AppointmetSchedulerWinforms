@@ -1,27 +1,22 @@
-﻿using System;
+﻿using jordan_rowland_c969.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 using MySql.Data.MySqlClient;
-using System.Data;
-using jordan_rowland_c969.Services;
 
 namespace jordan_rowland_c969.Database
 {
-    public static class Customer
+    public static class Address
     {
-        public static void Create(Services.Customer customer)
+        //public static AddressStruct getAddress(int addressId)
+        //{
+
+        //}
+
+        public static void Create()
         {
-            // Try/catch here/ but maybe do it above instead
-
-
-            // Country.Create();
-            // City.Create();
-            // Address.Create();
-
-
             using (MySqlCommand cmd = new MySqlCommand(
                 "INSERT INTO customer (" +
                 // Update to insert correct values for loggedin user
@@ -31,7 +26,7 @@ namespace jordan_rowland_c969.Database
                 ")",
                 DBConnection.Conn))
             {
-                cmd.Parameters.Add("@customerName", MySqlDbType.VarChar, 50).Value = customer.Name;
+                //cmd.Parameters.Add("@customerName", MySqlDbType.VarChar, 50).Value = customer.Name;
                 cmd.Parameters.Add("@addressId", MySqlDbType.Int32).Value = 1;
                 cmd.Parameters.Add("@createDate", MySqlDbType.DateTime).Value = DateTime.UtcNow;
                 cmd.Parameters.Add("@createdBy", MySqlDbType.VarChar, 50).Value = "test";
@@ -40,8 +35,28 @@ namespace jordan_rowland_c969.Database
                 cmd.ExecuteNonQuery();
                 //return true;
             }
-
-            //return false;
         }
+
     }
+
+        //public struct AddressStruct
+        //{
+        //    public int Id { get; set; }
+        //    public string Address { get; set; }
+        //    public string Address2 { get; set; }
+        //    public int CityId { get; set; }
+        //    public string PostalCode { get; set; }
+        //    public string Phone { get; set; }
+
+        //public AddressStruct(int id, string address, string address2,
+        //    int cityId, string postalCode, string phone)
+        //{
+        //    Id = id;
+        //    Address = address;
+        //    Address2 = address2;
+        //    CityId = cityId;
+        //    PostalCode = postalCode;
+        //    Phone = phone;
+        //}
+    //}
 }

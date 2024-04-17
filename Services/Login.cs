@@ -10,7 +10,7 @@ namespace jordan_rowland_c969.Services
 {
     public static class Login
     {
-        internal static (bool result, User user) ValidateLogin(
+        internal static (bool result, Global global) ValidateLogin(
             MySqlConnection conn, string username, string password)
         {
             MySqlCommand query = new MySqlCommand(
@@ -19,19 +19,18 @@ namespace jordan_rowland_c969.Services
             );
             query.Parameters.AddWithValue("@username", username);
             query.Parameters.AddWithValue("@password", password);
-
             MySqlDataReader reader = query.ExecuteReader();
 
-            while (reader.Read())
+            (bool result, Global global) results = (false, new Global());
+            if (reader.Read())
             {
-                return (true, new User() {
-                    Id = reader.GetInt32(0),
-                    Username = reader.GetString(1),
+                results = (true, new Global() {
+                    User = (reader.GetInt32(0), reader.GetString(1)),
                 });
             }
             // TODO: Throw an exception here instead 
             reader.Close();
-            return (false, new User());
+            return results;
         }
     }
 }
