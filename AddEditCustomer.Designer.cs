@@ -185,6 +185,7 @@
             this.Controls.Add(this.btn_Cancel);
             this.Name = "AddEditCustomer";
             this.Text = "AddEditCustomer";
+            this.Load += new System.EventHandler(this.AddEditCustomer_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

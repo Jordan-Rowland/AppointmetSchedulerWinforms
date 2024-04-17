@@ -71,6 +71,41 @@ namespace jordan_rowland_c969.Database
             return customer;
         }
 
+        public static List<CustomerStruct> GetCustomers()
+        {
+            MySqlCommand query = new MySqlCommand(
+                "SELECT " +
+                "customerId " +
+                ", customerName" +
+                ", a.address" +
+                ", ci.city" +
+                ", co.country" +
+                ", a.phone " +
+                "FROM customer AS c " +
+                "INNER JOIN address a on a.addressId = c.addressId " +
+                "INNER JOIN city ci on ci.cityId = a.cityId " +
+                "INNER JOIN country co on co.countryId = ci.countryId",
+                DBConnection.Conn);
+            MySqlDataReader reader = query.ExecuteReader();
+
+            List<CustomerStruct> customers = new List<CustomerStruct>();
+            while (reader.Read())
+            {
+                customers.Add(new CustomerStruct()
+                {
+                    Id = reader.GetInt32(0),
+                    Name = reader.GetString(1),
+                    Address = reader.GetString(2),
+                    City = reader.GetString(3),
+                    Country = reader.GetString(4),
+                    Phone = reader.GetString(5),
+                });
+
+            }
+            reader.Close();
+            return customers;
+        }
+
         public static void Update(Global g, Services.Customer customer)
         {
             // Try/catch here/ but maybe do it above instead

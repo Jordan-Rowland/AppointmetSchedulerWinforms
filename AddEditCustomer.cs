@@ -15,7 +15,7 @@ namespace jordan_rowland_c969
     public partial class AddEditCustomer : Form
     {
         bool EditMode = false;
-        int customerId {  get; set; }
+        int customerId { get; set; }
         Global g { get; set; }
 
         public AddEditCustomer(Global global)
@@ -40,15 +40,6 @@ namespace jordan_rowland_c969
 
         private void btn_Save_Click(object sender, EventArgs e)
         {
-            Dictionary<string, string> customerData = new Dictionary<string, string>
-            {
-                {"name", txt_Name.Text},
-                {"address", txt_Address.Text },
-                {"city", txt_City.Text},
-                {"country", txt_Country.Text},
-                {"phoneNumber", txt_PhoneNumber.Text},
-            };
-
             Services.Customer customer = new Services.Customer()
             {
                 Name = txt_Name.Text,
@@ -65,12 +56,13 @@ namespace jordan_rowland_c969
             }
             else customer.Create(g);
             Close();
-
         }
 
-        private void btn_Cancel_Click(object sender, EventArgs e)
+        private void btn_Cancel_Click(object sender, EventArgs e) => Close();
+
+        private void AddEditCustomer_Load(object sender, EventArgs e)
         {
-            Close();
+
         }
     }
 }

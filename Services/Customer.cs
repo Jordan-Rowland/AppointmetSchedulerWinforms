@@ -35,13 +35,16 @@ namespace jordan_rowland_c969.Services
             };
         }
 
+        //public static List<Customer> GetCustomers()
+        //{
+        //    // Capture the exception if it bubbles up
+        //    CustomerStruct List<customerStruct> = Database.Customer.GetCustomers(customerId);
+        //}
+
         public void Update(Global g) => // Capture the exception if it bubbles up
             Database.Customer.Update(g, this);
 
         public static void Delete(int customerId) => // Capture the exception if it bubbles up
             Database.Customer.Delete(customerId);
     }
-
 }
-
-
