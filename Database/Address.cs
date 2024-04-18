@@ -18,20 +18,20 @@ namespace jordan_rowland_c969.Database
                 ") VALUES (" +
                 "@address, '', @cityId, '', @phone, @createDate, @createdBy, @lastUpdate, @lastUpdateBy" +
                 ")",
-                DBConnection.Conn))
+                DBInit.Conn))
             {
-                cmd.Parameters.Add("@address", MySqlDbType.VarChar, 50).Value = address;
+                cmd.Parameters.Add("@address", MySqlDbType.VarChar, 50).Value = DBHelper.NormalizeStringLength(address, 50);
                 cmd.Parameters.Add("@cityId", MySqlDbType.Int32).Value = cityId;
-                cmd.Parameters.Add("@phone", MySqlDbType.VarChar, 50).Value = phone;
+                cmd.Parameters.Add("@phone", MySqlDbType.VarChar, 20).Value = DBHelper.NormalizeStringLength(phone, 20);
                 cmd.Parameters.Add("@createDate", MySqlDbType.DateTime).Value = DateTime.UtcNow;
-                cmd.Parameters.Add("@createdBy", MySqlDbType.VarChar, 50).Value = g.User.Username;
+                cmd.Parameters.Add("@createdBy", MySqlDbType.VarChar, 40).Value = DBHelper.NormalizeStringLength(g.User.Username, 40);
                 cmd.Parameters.Add("@lastUpdate", MySqlDbType.DateTime).Value = DateTime.UtcNow;
-                cmd.Parameters.Add("@lastUpdateBy", MySqlDbType.VarChar, 50).Value = g.User.Username;
+                cmd.Parameters.Add("@lastUpdateBy", MySqlDbType.VarChar, 40).Value = DBHelper.NormalizeStringLength(g.User.Username, 40);
                 cmd.ExecuteNonQuery();
             }
             MySqlCommand query = new MySqlCommand(
                 $"SELECT addressId FROM address ORDER BY addressId DESC",
-                DBConnection.Conn);
+                DBInit.Conn);
             MySqlDataReader reader = query.ExecuteReader();
 
             reader.Read();

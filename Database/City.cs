@@ -14,20 +14,20 @@ namespace jordan_rowland_c969.Database
             using (MySqlCommand cmd = new MySqlCommand(
                 "INSERT INTO city (city, countryId, createDate, createdBy, lastUpdate, lastUpdateBy" +
                 ") VALUES (@city, @countryId, @createDate, @createdBy, @lastUpdate, @lastUpdateBy)",
-                DBConnection.Conn))
+                DBInit.Conn))
             {
-                cmd.Parameters.Add("@city", MySqlDbType.VarChar, 50).Value = city;
+                cmd.Parameters.Add("@city", MySqlDbType.VarChar, 50).Value = DBHelper.NormalizeStringLength(city, 50);
                 cmd.Parameters.Add("@countryId", MySqlDbType.Int32).Value = countryId;
                 cmd.Parameters.Add("@createDate", MySqlDbType.DateTime).Value = DateTime.UtcNow;
-                cmd.Parameters.Add("@createdBy", MySqlDbType.VarChar, 50).Value = g.User.Username;
+                cmd.Parameters.Add("@createdBy", MySqlDbType.VarChar, 40).Value = DBHelper.NormalizeStringLength(g.User.Username, 40);
                 cmd.Parameters.Add("@lastUpdate", MySqlDbType.DateTime).Value = DateTime.UtcNow;
-                cmd.Parameters.Add("@lastUpdateBy", MySqlDbType.VarChar, 50).Value = g.User.Username;
+                cmd.Parameters.Add("@lastUpdateBy", MySqlDbType.VarChar, 40).Value = DBHelper.NormalizeStringLength(g.User.Username, 40);
                 cmd.ExecuteNonQuery();
             }
 
             MySqlCommand query = new MySqlCommand(
                 $"SELECT cityId FROM city ORDER BY cityId DESC",
-                DBConnection.Conn);
+                DBInit.Conn);
             MySqlDataReader reader = query.ExecuteReader();
 
             reader.Read();

@@ -22,7 +22,7 @@ namespace jordan_rowland_c969.Database
                     ") VALUES (" +
                     "@customerName, @addressId, 1, @createDate, @createdBy, @lastUpdate, @lastUpdateBy" +
                     ")",
-                    DBConnection.Conn);
+                    DBInit.Conn);
             }
             else if (action == DBAction.UPDATE)
             {
@@ -33,22 +33,22 @@ namespace jordan_rowland_c969.Database
                     "lastUpdate = @lastUpdate, " +
                     "lastUpdateBy = @lastUpdateBy " +
                     "WHERE customerID = @customerId",
-                    DBConnection.Conn);
+                    DBInit.Conn);
             }
                 using (cmd)
             {
-                cmd.Parameters.Add("@customerName", MySqlDbType.VarChar, 50).Value = customer.Name;
+                cmd.Parameters.Add("@customerName", MySqlDbType.VarChar, 45).Value = DBHelper.NormalizeStringLength(customer.Name, 45);
                 cmd.Parameters.Add("@addressId", MySqlDbType.Int32).Value = addressId;
                 cmd.Parameters.Add("@lastUpdate", MySqlDbType.DateTime).Value = DateTime.UtcNow;
-                cmd.Parameters.Add("@lastUpdateBy", MySqlDbType.VarChar, 50).Value = g.User.Username;
+                cmd.Parameters.Add("@lastUpdateBy", MySqlDbType.VarChar, 40).Value = DBHelper.NormalizeStringLength(g.User.Username, 40);
                 
                 if (action == DBAction.CREATE)
                 {
                     cmd.Parameters.Add("@createDate", MySqlDbType.DateTime).Value = DateTime.UtcNow;
-                    cmd.Parameters.Add("@createdBy", MySqlDbType.VarChar, 50).Value = g.User.Username;
+                    cmd.Parameters.Add("@createdBy", MySqlDbType.VarChar, 40).Value = DBHelper.NormalizeStringLength(g.User.Username, 40);
                 }
                 else if (action == DBAction.UPDATE)
-                    cmd.Parameters.Add("@customerId", MySqlDbType.VarChar, 50).Value = customer.Id;
+                    cmd.Parameters.Add("@customerId", MySqlDbType.Int32).Value = customer.Id;
                 
                 cmd.ExecuteNonQuery();
             }
@@ -70,7 +70,7 @@ namespace jordan_rowland_c969.Database
                 "INNER JOIN city ci on ci.cityId = a.cityId " +
                 "INNER JOIN country co on co.countryId = ci.countryId " +
                 "WHERE customerId = @customerId",
-                DBConnection.Conn);
+                DBInit.Conn);
             query.Parameters.Add("@customerId", MySqlDbType.Int32).Value = customerId;
             MySqlDataReader reader = query.ExecuteReader();
 
@@ -103,7 +103,7 @@ namespace jordan_rowland_c969.Database
                 "INNER JOIN address a on a.addressId = c.addressId " +
                 "INNER JOIN city ci on ci.cityId = a.cityId " +
                 "INNER JOIN country co on co.countryId = ci.countryId",
-                DBConnection.Conn);
+                DBInit.Conn);
             MySqlDataReader reader = query.ExecuteReader();
 
             List<CustomerStruct> customers = new List<CustomerStruct>();
@@ -128,7 +128,7 @@ namespace jordan_rowland_c969.Database
         public static void Delete(int customerId)
         {
             using (MySqlCommand cmd = new MySqlCommand(
-                "DELETE FROM customer WHERE customerId = @customerId", DBConnection.Conn))
+                "DELETE FROM customer WHERE customerId = @customerId", DBInit.Conn))
             {
                 cmd.Parameters.Add("@customerId", MySqlDbType.Int32).Value = customerId;
                 cmd.ExecuteNonQuery();

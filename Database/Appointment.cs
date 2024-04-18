@@ -22,7 +22,7 @@ namespace jordan_rowland_c969.Database
                 "@customerId, @userId, @title, @description, @location, @contact, " +
                 "@type, @url, @start, @end, @createDate, @createdBy, @lastUpdate, @lastUpdateBy" +
                 ")",
-                DBConnection.Conn);
+                DBInit.Conn);
             }
             else if (action == DBAction.UPDATE)
             {
@@ -41,28 +41,28 @@ namespace jordan_rowland_c969.Database
                     "lastUpdate = @lastUpdate, " +
                     "lastUpdateBy = @lastUpdateBy " +
                     "WHERE appointmentId = @appointmentId",
-                    DBConnection.Conn);
+                    DBInit.Conn);
             }
             // Try/catch here/ but maybe do it above instead
             using (cmd)
             {
                 cmd.Parameters.Add("@customerId", MySqlDbType.Int32).Value = appointment.CustomerId;
                 cmd.Parameters.Add("@userId", MySqlDbType.Int32).Value = appointment.UserId;
-                cmd.Parameters.Add("@title", MySqlDbType.VarChar, 50).Value = NormalizeStringLength(appointment.Title, 255, defaultValue: "not needed");
-                cmd.Parameters.Add("@description", MySqlDbType.VarChar, 50).Value = NormalizeStringLength(appointment.Description, defaultValue: "not needed");
-                cmd.Parameters.Add("@location", MySqlDbType.VarChar, 50).Value = NormalizeStringLength(appointment.Location, defaultValue: "not needed");
-                cmd.Parameters.Add("@contact", MySqlDbType.VarChar, 50).Value = NormalizeStringLength(appointment.Contact, defaultValue: "not needed");
+                cmd.Parameters.Add("@title", MySqlDbType.VarChar, 255).Value = DBHelper.NormalizeStringLength(appointment.Title, 255, defaultValue: "not needed");
+                cmd.Parameters.Add("@description", MySqlDbType.VarChar, 50).Value = DBHelper.NormalizeStringLength(appointment.Description, defaultValue: "not needed");
+                cmd.Parameters.Add("@location", MySqlDbType.VarChar, 50).Value = DBHelper.NormalizeStringLength(appointment.Location, defaultValue: "not needed");
+                cmd.Parameters.Add("@contact", MySqlDbType.VarChar, 50).Value = DBHelper.NormalizeStringLength(appointment.Contact, defaultValue: "not needed");
                 cmd.Parameters.Add("@type", MySqlDbType.VarChar, 50).Value = appointment.Type;
-                cmd.Parameters.Add("@url", MySqlDbType.VarChar, 50).Value = NormalizeStringLength(appointment.Url, 255, defaultValue: "not needed");
+                cmd.Parameters.Add("@url", MySqlDbType.VarChar, 255).Value = DBHelper.NormalizeStringLength(appointment.Url, 255, defaultValue: "not needed");
                 cmd.Parameters.Add("@start", MySqlDbType.DateTime).Value = TimeZoneInfo.ConvertTimeToUtc(appointment.Start, TimeZoneInfo.Local);
                 cmd.Parameters.Add("@end", MySqlDbType.DateTime).Value = TimeZoneInfo.ConvertTimeToUtc(appointment.Start.AddMinutes(45), TimeZoneInfo.Local);
                 cmd.Parameters.Add("@lastUpdate", MySqlDbType.DateTime).Value = DateTime.UtcNow;
-                cmd.Parameters.Add("@lastUpdateBy", MySqlDbType.VarChar, 40).Value = g.User.Username;
+                cmd.Parameters.Add("@lastUpdateBy", MySqlDbType.VarChar, 40).Value = DBHelper.NormalizeStringLength(g.User.Username, 40);
 
                 if (action == DBAction.CREATE)
                 {
                     cmd.Parameters.Add("@createDate", MySqlDbType.DateTime).Value = DateTime.UtcNow;
-                    cmd.Parameters.Add("@createdBy", MySqlDbType.VarChar, 40).Value = g.User.Username;
+                    cmd.Parameters.Add("@createdBy", MySqlDbType.VarChar, 40).Value = DBHelper.NormalizeStringLength(g.User.Username, 40);
                 }
                 else if (action == DBAction.UPDATE)
                     cmd.Parameters.Add("@appointmentId", MySqlDbType.Int32).Value = appointment.AppointmentId;
@@ -71,12 +71,12 @@ namespace jordan_rowland_c969.Database
             }
         }
 
-        private static string NormalizeStringLength(string value, int? maxLength = null, string defaultValue = "")
-        {
-            if (value == "") return defaultValue;
-            if (value.Length < maxLength || maxLength == null) return value;
-            return value.Substring(0, maxLength.Value);
-        }
+        //private static string NormalizeStringLength(string value, int? maxLength = null, string defaultValue = "")
+        //{
+        //    if (value == "") return defaultValue;
+        //    if (value.Length < maxLength || maxLength == null) return value;
+        //    return value.Substring(0, maxLength.Value);
+        //}
 
         public static AppointmentStruct GetAppointment(int appointmentId)
         {
@@ -98,7 +98,7 @@ namespace jordan_rowland_c969.Database
                 "INNER JOIN user u on u.userId = a.userId " +
                 "INNER JOIN customer c on c.customerId = a.customerId " +
                 "WHERE a.appointmentId = @appointmentId",
-                DBConnection.Conn);
+                DBInit.Conn);
             query.Parameters.Add("@appointmentId", MySqlDbType.Int32).Value = appointmentId;
             MySqlDataReader reader = query.ExecuteReader();
 
@@ -142,7 +142,7 @@ namespace jordan_rowland_c969.Database
                 "FROM appointment a " +
                 "INNER JOIN user u on u.userId = a.userId " +
                 "INNER JOIN customer c on c.customerId = a.customerId " +
-                DBConnection.Conn
+                DBInit.Conn
             );
 
             MySqlDataReader reader = query.ExecuteReader();
@@ -174,7 +174,7 @@ namespace jordan_rowland_c969.Database
         public static void Delete(int appointmentId)
         {
             using (MySqlCommand cmd = new MySqlCommand(
-                "DELETE FROM appointment WHERE appointmentId = @appointmentId", DBConnection.Conn))
+                "DELETE FROM appointment WHERE appointmentId = @appointmentId", DBInit.Conn))
             {
                 cmd.Parameters.Add("@appointmentId", MySqlDbType.Int32).Value = appointmentId;
                 cmd.ExecuteNonQuery();
@@ -193,7 +193,7 @@ namespace jordan_rowland_c969.Database
                 $") OR (" +
                 $"start < '{strEndTime}' AND '{strEndTime}' < end" +
                 $")",
-                DBConnection.Conn
+                DBInit.Conn
             );
 
             MySqlDataReader reader = query.ExecuteReader();
@@ -219,7 +219,7 @@ namespace jordan_rowland_c969.Database
                 $") OR (" +
                 $"start < '{strEndTime}' AND '{strEndTime}' < end" +
                 $")) AND appointmentId != {appointmentID}",
-                DBConnection.Conn
+                DBInit.Conn
             );
 
             MySqlDataReader reader = query.ExecuteReader();

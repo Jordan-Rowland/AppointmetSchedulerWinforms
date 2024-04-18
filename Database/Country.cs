@@ -14,19 +14,19 @@ namespace jordan_rowland_c969.Database
             using (MySqlCommand cmd = new MySqlCommand(
                 "INSERT INTO country (country, createDate, createdBy, lastUpdate, lastUpdateBy" +
                 ") VALUES (@country, @createDate, @createdBy, @lastUpdate, @lastUpdateBy)",
-                DBConnection.Conn))
+                DBInit.Conn))
             {
-                cmd.Parameters.Add("@country", MySqlDbType.VarChar, 50).Value = country;
+                cmd.Parameters.Add("@country", MySqlDbType.VarChar, 50).Value = DBHelper.NormalizeStringLength(country, 50);
                 cmd.Parameters.Add("@createDate", MySqlDbType.DateTime).Value = DateTime.UtcNow;
-                cmd.Parameters.Add("@createdBy", MySqlDbType.VarChar, 50).Value = g.User.Username;
+                cmd.Parameters.Add("@createdBy", MySqlDbType.VarChar, 40).Value = DBHelper.NormalizeStringLength(g.User.Username, 40);
                 cmd.Parameters.Add("@lastUpdate", MySqlDbType.DateTime).Value = DateTime.UtcNow;
-                cmd.Parameters.Add("@lastUpdateBy", MySqlDbType.VarChar, 50).Value = g.User.Username;
+                cmd.Parameters.Add("@lastUpdateBy", MySqlDbType.VarChar, 40).Value = DBHelper.NormalizeStringLength(g.User.Username, 40);
                 cmd.ExecuteNonQuery();
             }
 
             MySqlCommand query = new MySqlCommand(
                 $"SELECT countryId FROM country ORDER BY countryId DESC",
-                DBConnection.Conn);
+                DBInit.Conn);
             MySqlDataReader reader = query.ExecuteReader();
 
             reader.Read();

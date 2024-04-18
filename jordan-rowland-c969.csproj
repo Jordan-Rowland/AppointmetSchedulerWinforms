@@ -121,7 +121,7 @@
     <Compile Include="Database\City.cs" />
     <Compile Include="Database\Country.cs" />
     <Compile Include="Database\Customer.cs" />
-    <Compile Include="Database\DBConnection.cs" />
+    <Compile Include="Database\DBInit.cs" />
     <Compile Include="Database\User.cs" />
     <Compile Include="Global.cs" />
     <Compile Include="LoginForm.cs">

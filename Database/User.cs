@@ -13,7 +13,7 @@ namespace jordan_rowland_c969.Database
         {
             MySqlCommand query = new MySqlCommand(
                 "SELECT userId, userName FROM user",
-                DBConnection.Conn);
+                DBInit.Conn);
             MySqlDataReader reader = query.ExecuteReader();
 
             List<UserStruct> users = new List<UserStruct>();

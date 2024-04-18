@@ -1,15 +1,8 @@
 ﻿using jordan_rowland_c969.Database;
-using jordan_rowland_c969.Services;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Diagnostics;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+
 
 namespace jordan_rowland_c969
 {

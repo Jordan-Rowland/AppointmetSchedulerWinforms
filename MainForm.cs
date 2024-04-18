@@ -44,7 +44,7 @@ namespace jordan_rowland_c969
         private void FillDataGrid(DataGridView dataGrid, string table, string query)
         {
             // Make better queries, not just everything
-            MySqlDataAdapter adp = new MySqlDataAdapter(query, DBConnection.Conn);
+            MySqlDataAdapter adp = new MySqlDataAdapter(query, DBInit.Conn);
 
             DataTable dt;
             dt = new DataTable();
@@ -58,6 +58,7 @@ namespace jordan_rowland_c969
             dataGrid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGrid.AllowUserToAddRows = false;
             dataGrid.ReadOnly = true;
+            dataGrid.MultiSelect = false;
         }
 
         private static void ConvertDTFieldsToLocal(string table, DataTable dt)
@@ -69,7 +70,8 @@ namespace jordan_rowland_c969
             {
                 "start", "end", "createDate", "lastUpdate"
             };
-
+            
+            Debug.WriteLine(TimeZoneInfo.Local);
             foreach (DataRow row in dt.Rows)
             {
                 foreach (string field in dtFields)
@@ -106,6 +108,7 @@ namespace jordan_rowland_c969
         {
             try
             {
+                // SelectedRows.Any() should solve an issue if nothing is selected.
                 int id = (int)dg_Customers.SelectedRows[0].Cells["CustomerId"].Value;
                 string message = "Delete customer?";
                 string caption = "Click Yes or No to confirm";
@@ -115,18 +118,25 @@ namespace jordan_rowland_c969
                 if (result == DialogResult.Yes) Services.Customer.Delete(id);
                 FillDataGrid(dg_Customers, "customer", "SELECT * FROM customer;");
             }
-            catch
+            catch (Exception ex)
             {
                 // Probably need to account for other errors
-                MessageBox.Show("No Customer selected");
+                MessageBox.Show(ex.Message);
             }
         }
 
         private void btn_AddAppointment_Click(object sender, EventArgs e)
         {
-            AddEditAppointment addEditAppointment = new AddEditAppointment(Global);
-            addEditAppointment.ShowDialog();
-            FillDataGrid(dg_Appointments, "appointment", "SELECT * FROM appointment;");
+            try
+            {
+                AddEditAppointment addEditAppointment = new AddEditAppointment(Global);
+                addEditAppointment.ShowDialog();
+                FillDataGrid(dg_Appointments, "appointment", "SELECT * FROM appointment;");
+            }
+            catch (Exception ex)
+            { // Maybe this should go in the AddEditAppointment form so the form doesn't close prematurely on an error
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private void btn_UpdateAppointment_Click(object sender, EventArgs e)
@@ -168,7 +178,8 @@ namespace jordan_rowland_c969
 
         private void btn_Monthly_Click(object sender, EventArgs e)
         {
-            DateTime now = DateTime.Now;
+            // Need to convert this to UTC before query
+            DateTime now = DateTime.UtcNow;
             string month = now.Month < 10 ? $"0{now.Month}" : now.Month.ToString();
             string query = $"SELECT * FROM appointment WHERE start LIKE '{now.Year}-{month}%' ;";
             FillDataGrid(dg_Appointments, "appointment", query);
@@ -176,9 +187,21 @@ namespace jordan_rowland_c969
 
         private void btn_Day_Click(object sender, EventArgs e)
         {
-            DateTime selectedDay = DateTime.Parse(dt_Date.Text);
+            // Need to convert this to UTC before query
+            // This doesn't work for some reason. Need ot find out why
+            DateTime selectedDay = TimeZoneInfo.ConvertTimeToUtc(DateTime.Parse(dt_Date.Text), TimeZoneInfo.Local);
+            //DateTime selectedDay = DateTime.Parse(dt_Date.Text);
+
+            //selectedDay = selectedDay.AddDays(1);
+            Debug.WriteLine(TimeZoneInfo.Local);
+            Debug.WriteLine(DateTime.Parse(dt_Date.Text));
+            Debug.WriteLine(selectedDay);
+            Debug.WriteLine(selectedDay.ToString("yyyy-MM-dd"));
+            //DateTime selectedDay = DateTime.Parse(dt_Date.Text);
             string query = (
-                $"SELECT * FROM appointment WHERE start LIKE '{selectedDay.ToString("yyyy-MM-dd")}%' "
+                $"SELECT * FROM appointment WHERE start between " +
+                $"DATE('{selectedDay.ToString("yyyy-MM-dd")}') " +
+                $"AND DATE('{selectedDay.AddHours(24).ToString("yyyy-MM-dd")}') "
             );
             FillDataGrid(dg_Appointments, "appointment", query);
         }

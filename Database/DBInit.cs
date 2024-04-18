@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Configuration;
 using System.Windows.Forms;
+
 using MySql.Data.MySqlClient;
 
 
 namespace jordan_rowland_c969.Database
 {
-    public class DBConnection
+    public class DBInit
     {
         public static MySqlConnection Conn { get; set; }
 
@@ -38,6 +34,16 @@ namespace jordan_rowland_c969.Database
             }
             catch (MySqlException ex) { MessageBox.Show(ex.Message); }
 
+        }
+    }
+
+    public static class DBHelper
+    {
+        public static string NormalizeStringLength(string value, int? maxLength = null, string defaultValue = "")
+        {
+            if (value == "") return defaultValue;
+            if (value.Length < maxLength || maxLength == null) return value;
+            return value.Substring(0, maxLength.Value);
         }
     }
 
