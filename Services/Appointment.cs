@@ -1,6 +1,7 @@
 ﻿using jordan_rowland_c969.Database;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,6 +26,20 @@ namespace jordan_rowland_c969.Services
         public void Create(Global g)
         {
             // Check against Eastern timezone, 9am-5pm
+            TimeZoneInfo estZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
+            DateTime utcStartTime= TimeZoneInfo.ConvertTimeToUtc(this.Start, TimeZoneInfo.Local);
+            DateTime estStartTime = TimeZoneInfo.ConvertTimeFromUtc(utcStartTime, estZone);
+
+            if (
+                estStartTime.Hour < 9
+                || estStartTime.Hour > 17
+                || estStartTime.DayOfWeek == DayOfWeek.Saturday
+                || estStartTime.DayOfWeek == DayOfWeek.Sunday
+                )
+            {
+                throw new Exception("Cannot schedule outside of business hours.");
+            }
+
             Database.Appointment.Create(g, this);
         }
         public static Appointment GetAppointment(int appointmentID)
