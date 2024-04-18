@@ -92,13 +92,6 @@ namespace jordan_rowland_c969.Database
         {
             // Try/catch here/ but maybe do it above instead
             using (MySqlCommand cmd = new MySqlCommand(
-                //"INSERT INTO appointment (" +
-                //"customerId, userId, title, description, location, contact, " +
-                //"type, url, start, end, createDate, createdBy, lastUpdate, lastUpdateBy" +
-                //") VALUES (" +
-                //"@customerId, @userId, @title, @description, @location, @contact, " +
-                //"@type, @url, @start, @end, @createDate, @createdBy, @lastUpdate, @lastUpdateBy" +
-                //")",
                 "UPDATE appointment SET " +
                 "title = @title, " +
                 "description = @description, " +

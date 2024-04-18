@@ -22,8 +22,11 @@ namespace jordan_rowland_c969.Services
         public string Url { get; set; }
         public DateTime Start { get; set; }
 
-        public void Create(Global g) => Database.Appointment.Create(g, this);
-
+        public void Create(Global g)
+        {
+            // Check against Eastern timezone, 9am-5pm
+            Database.Appointment.Create(g, this);
+        }
         public static Appointment GetAppointment(int appointmentID)
         {
             AppointmentStruct appointmentStruct = Database.Appointment.GetAppointment(appointmentID);

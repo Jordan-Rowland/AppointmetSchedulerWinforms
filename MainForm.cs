@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -17,6 +18,7 @@ using jordan_rowland_c969.Services;
 using MySql.Data;
 using MySql.Data.MySqlClient;
 using MySqlX.XDevAPI;
+using MySqlX.XDevAPI.Common;
 using MySqlX.XDevAPI.Relational;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
@@ -41,18 +43,19 @@ namespace jordan_rowland_c969
             //    if (!loginForm.LoginSuccessful) Environment.Exit(0);
             //    Global = loginForm.Global;
             //}
+
+            //TimeZoneInfo estZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
+
+            //hwZone.IsDaylightSavingTime(hwTime) ? hwZone.DaylightName : hwZone.StandardName,
+
+            //TimeZoneInfo.ConvertTime(hwTime, hwZone, TimeZoneInfo.Local));
+
+
             InitializeComponent();
             txt_User.Text = $"Logged in as: {Global.User.Username}";
 
             FillDataGrid(dg_Customers, "customer");
             FillDataGrid(dg_Appointments, "appointment");
-
-            dg_Customers.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dg_Appointments.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dg_Customers.AllowUserToAddRows = false;
-            dg_Appointments.AllowUserToAddRows = false;
-            dg_Customers.ReadOnly = true;
-            dg_Appointments.ReadOnly = true;
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -64,10 +67,31 @@ namespace jordan_rowland_c969
         {
             MySqlDataAdapter adp;
             DataTable dt;
-            adp = new MySqlDataAdapter(new MySqlCommand($"SELECT * FROM {table}", DBConnection.Conn));
+            adp = new MySqlDataAdapter(new MySqlCommand(
+                $"SELECT * FROM {table}", DBConnection.Conn)
+            );
             dt = new DataTable();
             adp.Fill(dt);
-            dataGrid.DataSource = dt;
+            BindingSource bs = new BindingSource();
+            bs.DataSource = dt;
+            dataGrid.DataSource = bs;
+            string[] dtFields = new string[0];
+
+            if (table == "customer") dtFields = new string[] { "createDate", "lastUpdate" };
+            else if (table == "appointment") dtFields = new string[] { "start", "end", "createDate", "lastUpdate" };
+
+            foreach (DataRow row in dt.Rows)
+            {
+                foreach (string field in dtFields)
+                {
+                    row[field] = TimeZoneInfo.ConvertTimeFromUtc((DateTime)row[field], TimeZoneInfo.Local);
+                }
+            }
+
+            dataGrid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dataGrid.AllowUserToAddRows = false;
+            dataGrid.ReadOnly = true;
+
         }
 
         private void btn_Exit_Click(object sender, EventArgs e) => Close();
