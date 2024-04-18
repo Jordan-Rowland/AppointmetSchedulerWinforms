@@ -18,7 +18,7 @@ namespace jordan_rowland_c969.Services
         public string Phone { get; set; }
 
         public void Create(Global g) => // Capture the exception if it bubbles up
-            Database.Customer.Create(g, this);
+            Database.Customer.CreateUpdate(g, this, DBAction.CREATE);
 
         public static Customer GetCustomer(int customerId)
         {
@@ -42,7 +42,7 @@ namespace jordan_rowland_c969.Services
         //}
 
         public void Update(Global g) => // Capture the exception if it bubbles up
-            Database.Customer.Update(g, this);
+            Database.Customer.CreateUpdate(g, this, DBAction.UPDATE);
 
         public static void Delete(int customerId) => // Capture the exception if it bubbles up
             Database.Customer.Delete(customerId);

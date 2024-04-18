@@ -40,4 +40,6 @@ namespace jordan_rowland_c969.Database
 
         }
     }
+
+    public enum DBAction { CREATE, UPDATE };
 }

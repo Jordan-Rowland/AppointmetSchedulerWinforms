@@ -1,23 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Security.Policy;
-using System.Text;
-using System.Threading.Tasks;
-using jordan_rowland_c969.Services;
+
 using MySql.Data.MySqlClient;
-using static Google.Protobuf.Reflection.SourceCodeInfo.Types;
+
 
 namespace jordan_rowland_c969.Database
 {
     public static class Appointment
     {
-
-        public static void Create(Global g, Services.Appointment appointment)
+        public static void CreateUpdate(Global g, Services.Appointment appointment, DBAction action)
         {
-            // Try/catch here/ but maybe do it above instead
-            using (MySqlCommand cmd = new MySqlCommand(
+            MySqlCommand cmd = new MySqlCommand();
+            if (action == DBAction.CREATE)
+            {
+                cmd = new MySqlCommand(
                 "INSERT INTO appointment (" +
                 "customerId, userId, title, description, location, contact, " +
                 "type, url, start, end, createDate, createdBy, lastUpdate, lastUpdateBy" +
@@ -25,24 +22,60 @@ namespace jordan_rowland_c969.Database
                 "@customerId, @userId, @title, @description, @location, @contact, " +
                 "@type, @url, @start, @end, @createDate, @createdBy, @lastUpdate, @lastUpdateBy" +
                 ")",
-                DBConnection.Conn))
+                DBConnection.Conn);
+            }
+            else if (action == DBAction.UPDATE)
+            {
+                cmd = new MySqlCommand(
+                    "UPDATE appointment SET " +
+                    "title = @title, " +
+                    "description = @description, " +
+                    "location = @location, " +
+                    "contact = @contact, " +
+                    "type = @type, " +
+                    "url = @url, " +
+                    "start = @start, " +
+                    "end = @end, " +
+                    "createDate = @createDate, " +
+                    "createdBy = @createdBy, " +
+                    "lastUpdate = @lastUpdate, " +
+                    "lastUpdateBy = @lastUpdateBy " +
+                    "WHERE appointmentId = @appointmentId",
+                    DBConnection.Conn);
+            }
+            // Try/catch here/ but maybe do it above instead
+            using (cmd)
             {
                 cmd.Parameters.Add("@customerId", MySqlDbType.Int32).Value = appointment.CustomerId;
                 cmd.Parameters.Add("@userId", MySqlDbType.Int32).Value = appointment.UserId;
-                cmd.Parameters.Add("@title", MySqlDbType.VarChar, 50).Value = appointment.Title;
-                cmd.Parameters.Add("@description", MySqlDbType.VarChar, 50).Value = appointment.Description;
-                cmd.Parameters.Add("@location", MySqlDbType.VarChar, 50).Value = appointment.Location;
-                cmd.Parameters.Add("@contact", MySqlDbType.VarChar, 50).Value = appointment.Contact;
+                cmd.Parameters.Add("@title", MySqlDbType.VarChar, 50).Value = NormalizeStringLength(appointment.Title, 255, defaultValue: "not needed");
+                cmd.Parameters.Add("@description", MySqlDbType.VarChar, 50).Value = NormalizeStringLength(appointment.Description, defaultValue: "not needed");
+                cmd.Parameters.Add("@location", MySqlDbType.VarChar, 50).Value = NormalizeStringLength(appointment.Location, defaultValue: "not needed");
+                cmd.Parameters.Add("@contact", MySqlDbType.VarChar, 50).Value = NormalizeStringLength(appointment.Contact, defaultValue: "not needed");
                 cmd.Parameters.Add("@type", MySqlDbType.VarChar, 50).Value = appointment.Type;
-                cmd.Parameters.Add("@url", MySqlDbType.VarChar, 50).Value = appointment.Url;
+                cmd.Parameters.Add("@url", MySqlDbType.VarChar, 50).Value = NormalizeStringLength(appointment.Url, 255, defaultValue: "not needed");
                 cmd.Parameters.Add("@start", MySqlDbType.DateTime).Value = TimeZoneInfo.ConvertTimeToUtc(appointment.Start, TimeZoneInfo.Local);
                 cmd.Parameters.Add("@end", MySqlDbType.DateTime).Value = TimeZoneInfo.ConvertTimeToUtc(appointment.Start.AddMinutes(45), TimeZoneInfo.Local);
-                cmd.Parameters.Add("@createDate", MySqlDbType.DateTime).Value = DateTime.UtcNow;
-                cmd.Parameters.Add("@createdBy", MySqlDbType.VarChar, 50).Value = g.User.Username;
                 cmd.Parameters.Add("@lastUpdate", MySqlDbType.DateTime).Value = DateTime.UtcNow;
-                cmd.Parameters.Add("@lastUpdateBy", MySqlDbType.VarChar, 50).Value = g.User.Username;
+                cmd.Parameters.Add("@lastUpdateBy", MySqlDbType.VarChar, 40).Value = g.User.Username;
+
+                if (action == DBAction.CREATE)
+                {
+                    cmd.Parameters.Add("@createDate", MySqlDbType.DateTime).Value = DateTime.UtcNow;
+                    cmd.Parameters.Add("@createdBy", MySqlDbType.VarChar, 40).Value = g.User.Username;
+                }
+                else if (action == DBAction.UPDATE)
+                    cmd.Parameters.Add("@appointmentId", MySqlDbType.Int32).Value = appointment.AppointmentId;
+
                 cmd.ExecuteNonQuery();
             }
+        }
+
+        private static string NormalizeStringLength(string value, int? maxLength = null, string defaultValue = "")
+        {
+            if (value == "") return defaultValue;
+            if (value.Length < maxLength || maxLength == null) return value;
+            return value.Substring(0, maxLength.Value);
         }
 
         public static AppointmentStruct GetAppointment(int appointmentId)
@@ -137,44 +170,6 @@ namespace jordan_rowland_c969.Database
             return appointments;
         }
 
-        public static void Update(Global g, Services.Appointment appointment)
-        {
-            // Try/catch here/ but maybe do it above instead
-            using (MySqlCommand cmd = new MySqlCommand(
-                "UPDATE appointment SET " +
-                "title = @title, " +
-                "description = @description, " +
-                "location = @location, " +
-                "contact = @contact, " +
-                "type = @type, " +
-                "url = @url, " +
-                "start = @start, " +
-                "end = @end, " +
-                "createDate = @createDate, " +
-                "createdBy = @createdBy, " +
-                "lastUpdate = @lastUpdate, " +
-                "lastUpdateBy = @lastUpdateBy " +
-                "WHERE appointmentId = @appointmentId",
-                DBConnection.Conn))
-            {
-                cmd.Parameters.Add("@customerId", MySqlDbType.Int32).Value = appointment.CustomerId;
-                cmd.Parameters.Add("@userId", MySqlDbType.Int32).Value = appointment.UserId;
-                cmd.Parameters.Add("@title", MySqlDbType.VarChar, 50).Value = appointment.Title;
-                cmd.Parameters.Add("@description", MySqlDbType.VarChar, 50).Value = appointment.Description;
-                cmd.Parameters.Add("@location", MySqlDbType.VarChar, 50).Value = appointment.Location;
-                cmd.Parameters.Add("@contact", MySqlDbType.VarChar, 50).Value = appointment.Contact;
-                cmd.Parameters.Add("@type", MySqlDbType.VarChar, 50).Value = appointment.Type;
-                cmd.Parameters.Add("@url", MySqlDbType.VarChar, 50).Value = appointment.Url;
-                cmd.Parameters.Add("@start", MySqlDbType.DateTime).Value = TimeZoneInfo.ConvertTimeToUtc(appointment.Start, TimeZoneInfo.Local);
-                cmd.Parameters.Add("@end", MySqlDbType.DateTime).Value = TimeZoneInfo.ConvertTimeToUtc(appointment.Start.AddMinutes(45), TimeZoneInfo.Local);
-                cmd.Parameters.Add("@createDate", MySqlDbType.DateTime).Value = DateTime.UtcNow;
-                cmd.Parameters.Add("@createdBy", MySqlDbType.VarChar, 50).Value = g.User.Username;
-                cmd.Parameters.Add("@lastUpdate", MySqlDbType.DateTime).Value = DateTime.UtcNow;
-                cmd.Parameters.Add("@lastUpdateBy", MySqlDbType.VarChar, 50).Value = g.User.Username;
-                cmd.Parameters.Add("@appointmentId", MySqlDbType.VarChar, 50).Value = appointment.AppointmentId;
-                cmd.ExecuteNonQuery();
-            }
-        }
 
         public static void Delete(int appointmentId)
         {
@@ -185,6 +180,7 @@ namespace jordan_rowland_c969.Database
                 cmd.ExecuteNonQuery();
             }
         }
+
 
         public static bool GetOverlappingAppointments(DateTime utcStartTime)
         {
@@ -210,6 +206,7 @@ namespace jordan_rowland_c969.Database
             reader.Close();
             return false;
         }
+
 
         public static bool GetOverlappingAppointments(DateTime utcStartTime, int appointmentID)
         {
@@ -237,6 +234,7 @@ namespace jordan_rowland_c969.Database
         }
     }
 
+
     public struct AppointmentStruct
     {
         public int AppointmentId { get; set; }
@@ -252,4 +250,7 @@ namespace jordan_rowland_c969.Database
         public string Url { get; set; }
         public DateTime Start { get; set; }
     }
+
+
+    //public enum DBAction { CREATE, UPDATE };
 }

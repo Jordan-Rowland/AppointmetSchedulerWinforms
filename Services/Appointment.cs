@@ -23,32 +23,11 @@ namespace jordan_rowland_c969.Services
         public string Url { get; set; }
         public DateTime Start { get; set; }
 
+
         public void Create(Global g)
         {
-            // Check against Eastern timezone, 9am-5pm
-            TimeZoneInfo estZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
-            DateTime utcStartTime = TimeZoneInfo.ConvertTimeToUtc(this.Start, TimeZoneInfo.Local);
-            DateTime estStartTime = TimeZoneInfo.ConvertTimeFromUtc(utcStartTime, estZone);
-
-            // Put these validations in the update method too
-            // Also don't allow scheduling in the past
-            if (
-                estStartTime.Hour < 9
-                || estStartTime.Hour > 17
-                || estStartTime.DayOfWeek == DayOfWeek.Saturday
-                || estStartTime.DayOfWeek == DayOfWeek.Sunday
-                )
-            {
-                throw new Exception("Cannot schedule outside of business hours.");
-            }
-
-            if (Database.Appointment.GetOverlappingAppointments(utcStartTime))
-                throw new Exception(
-                    "There is already an appointment scheduled during this time.\n" +
-                    "Please select another time."
-                );
-
-            Database.Appointment.Create(g, this);
+            ValidateDates();
+            Database.Appointment.CreateUpdate(g, this, DBAction.CREATE);
         }
 
 
@@ -72,23 +51,46 @@ namespace jordan_rowland_c969.Services
             };
         }
 
+
+
         // May not need this.
         public static List<AppointmentStruct> GetAppointments() => Database.Appointment.GetAppointments();
 
+
         public void Update(Global g)
         {
+            ValidateDates();
+            Database.Appointment.CreateUpdate(g, this, DBAction.UPDATE);
+        }
+
+
+        public static void Delete(int appointmentId) => // Capture the exception if it bubbles up
+            Database.Appointment.Delete(appointmentId);
+
+
+        public void ValidateDates()
+        {
+            TimeZoneInfo estZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
             DateTime utcStartTime = TimeZoneInfo.ConvertTimeToUtc(this.Start, TimeZoneInfo.Local);
-            // Need to ensure it doesn't flag for overlapping with self
-            if (Database.Appointment.GetOverlappingAppointments(utcStartTime, AppointmentId))
+            DateTime estStartTime = TimeZoneInfo.ConvertTimeFromUtc(utcStartTime, estZone);
+
+            // Also don't allow scheduling in the past
+
+            if (
+                estStartTime.Hour < 9
+                || estStartTime.Hour > 17
+                || estStartTime.DayOfWeek == DayOfWeek.Saturday
+                || estStartTime.DayOfWeek == DayOfWeek.Sunday
+                )
+            {
+                throw new Exception("Cannot schedule outside of Monday - Friday, 9am - 5pm Eastern Time.");
+            }
+
+            if (Database.Appointment.GetOverlappingAppointments(utcStartTime))
                 throw new Exception(
                     "There is already an appointment scheduled during this time.\n" +
                     "Please select another time."
                 );
-            // Capture the exception if it bubbles up
-            Database.Appointment.Update(g, this);
         }
-
-        public static void Delete(int appointmentId) => // Capture the exception if it bubbles up
-            Database.Appointment.Delete(appointmentId);
     }
 }
