@@ -44,13 +44,14 @@ namespace jordan_rowland_c969
             txt_Location.Text = appointment.Location;
             txt_Title.Text = appointment.Title;
             txt_Url.Text = appointment.Url;
+            dt_Date.Text = TimeZoneInfo.ConvertTimeFromUtc(appointment.Start, TimeZoneInfo.Local).ToString();
         }
 
         private void ConfigureForm()
         {
             // Comboc boxes need to be read-only
             dt_Date.Format = DateTimePickerFormat.Custom;
-            dt_Date.CustomFormat = "MM/dd/yyyy hh:mm:ss";
+            dt_Date.CustomFormat = "MM/dd/yyyy hh:mm:ss tt";
             List<CustomerStruct> customers = Database.Customer.GetCustomers();
             List<ComboItem> customerDataSource = new List<ComboItem>();
             foreach (var c in customers) customerDataSource.Add(new ComboItem { Id = c.Id, Text = c.Name });
@@ -108,7 +109,6 @@ namespace jordan_rowland_c969
                 appointment.Update(g);
             }
             else appointment.Create(g);
-            //appointment.Create(g);
             Close();
         }
     }

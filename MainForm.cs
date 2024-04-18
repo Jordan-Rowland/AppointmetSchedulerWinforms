@@ -1,28 +1,11 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Configuration;
 using System.Data;
-using System.Data.Common;
-using System.Diagnostics;
-using System.Drawing;
-using System.Globalization;
-using System.Linq;
-using System.Security.Policy;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using Google.Protobuf.WellKnownTypes;
-using jordan_rowland_c969.Database;
-using jordan_rowland_c969.Services;
 
-using MySql.Data;
 using MySql.Data.MySqlClient;
-using MySqlX.XDevAPI;
-using MySqlX.XDevAPI.Common;
-using MySqlX.XDevAPI.Relational;
-using static VisualStyles.VisualStyleElement.StartPanel;
+
+using jordan_rowland_c969.Database;
+using System.Diagnostics;
 
 
 namespace jordan_rowland_c969
@@ -191,17 +174,12 @@ namespace jordan_rowland_c969
             FillDataGrid(dg_Appointments, "appointment", query);
         }
 
-        private void btn_Weekly_Click(object sender, EventArgs e)
+        private void btn_Day_Click(object sender, EventArgs e)
         {
-            DateTime now = DateTime.Now;
-
-            DateTime startDay = now.AddDays(-(int)now.DayOfWeek);
-            DateTime endDay = now.AddDays((int)now.DayOfWeek - 1);
-
-            string query = $"SELECT * FROM appointment " +
-                $"WHERE start BETWEEN " +
-                $"DATE('{startDay.ToString("yyyy-MM-dd")}') and " +
-                $"DATE('{endDay.ToString("yyyy-MM-dd")}');";
+            DateTime selectedDay = DateTime.Parse(dt_Date.Text);
+            string query = (
+                $"SELECT * FROM appointment WHERE start LIKE '{selectedDay.ToString("yyyy-MM-dd")}%' "
+            );
             FillDataGrid(dg_Appointments, "appointment", query);
         }
     }

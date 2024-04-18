@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Security.Policy;
 using System.Text;
@@ -34,8 +35,8 @@ namespace jordan_rowland_c969.Database
                 cmd.Parameters.Add("@contact", MySqlDbType.VarChar, 50).Value = appointment.Contact;
                 cmd.Parameters.Add("@type", MySqlDbType.VarChar, 50).Value = appointment.Type;
                 cmd.Parameters.Add("@url", MySqlDbType.VarChar, 50).Value = appointment.Url;
-                cmd.Parameters.Add("@start", MySqlDbType.DateTime).Value = appointment.Start;
-                cmd.Parameters.Add("@end", MySqlDbType.DateTime).Value = appointment.Start.AddMinutes(45);
+                cmd.Parameters.Add("@start", MySqlDbType.DateTime).Value = TimeZoneInfo.ConvertTimeToUtc(appointment.Start, TimeZoneInfo.Local);
+                cmd.Parameters.Add("@end", MySqlDbType.DateTime).Value = TimeZoneInfo.ConvertTimeToUtc(appointment.Start.AddMinutes(45), TimeZoneInfo.Local);
                 cmd.Parameters.Add("@createDate", MySqlDbType.DateTime).Value = DateTime.UtcNow;
                 cmd.Parameters.Add("@createdBy", MySqlDbType.VarChar, 50).Value = g.User.Username;
                 cmd.Parameters.Add("@lastUpdate", MySqlDbType.DateTime).Value = DateTime.UtcNow;
@@ -44,7 +45,7 @@ namespace jordan_rowland_c969.Database
             }
         }
 
-            public static AppointmentStruct GetAppointment(int appointmentId)
+        public static AppointmentStruct GetAppointment(int appointmentId)
         {
             MySqlCommand query = new MySqlCommand(
                 "SELECT " +
@@ -88,6 +89,54 @@ namespace jordan_rowland_c969.Database
             return appointment;
         }
 
+        // Might not need this
+        public static List<AppointmentStruct> GetAppointments()
+        {
+            MySqlCommand query = new MySqlCommand(
+                "SELECT " +
+                "a.appointmentID " +
+                ", a.customerId" +
+                ", a.userId" +
+                ", title" +
+                ", description" +
+                ", location" +
+                ", contact" +
+                ", type" +
+                ", url" +
+                ", start" +
+                ", u.userName" +
+                ", c.customerName " +
+                "FROM appointment a " +
+                "INNER JOIN user u on u.userId = a.userId " +
+                "INNER JOIN customer c on c.customerId = a.customerId " +
+                DBConnection.Conn
+            );
+
+            MySqlDataReader reader = query.ExecuteReader();
+            List<AppointmentStruct> appointments = new List<AppointmentStruct>();
+            while (reader.Read())
+            {
+                appointments.Add(new AppointmentStruct()
+                {
+                    AppointmentId = reader.GetInt32(0),
+                    CustomerId = reader.GetInt32(1),
+                    UserId = reader.GetInt32(2),
+                    Title = reader.GetString(3),
+                    Description = reader.GetString(4),
+                    Location = reader.GetString(5),
+                    Contact = reader.GetString(6),
+                    Type = reader.GetString(7),
+                    Url = reader.GetString(8),
+                    Start = reader.GetDateTime(9),
+                    UserName = reader.GetString(10),
+                    CustomerName = reader.GetString(11),
+                });
+
+            }
+            reader.Close();
+            return appointments;
+        }
+
         public static void Update(Global g, Services.Appointment appointment)
         {
             // Try/catch here/ but maybe do it above instead
@@ -116,8 +165,8 @@ namespace jordan_rowland_c969.Database
                 cmd.Parameters.Add("@contact", MySqlDbType.VarChar, 50).Value = appointment.Contact;
                 cmd.Parameters.Add("@type", MySqlDbType.VarChar, 50).Value = appointment.Type;
                 cmd.Parameters.Add("@url", MySqlDbType.VarChar, 50).Value = appointment.Url;
-                cmd.Parameters.Add("@start", MySqlDbType.DateTime).Value = appointment.Start;
-                cmd.Parameters.Add("@end", MySqlDbType.DateTime).Value = appointment.Start.AddMinutes(45);
+                cmd.Parameters.Add("@start", MySqlDbType.DateTime).Value = TimeZoneInfo.ConvertTimeToUtc(appointment.Start, TimeZoneInfo.Local);
+                cmd.Parameters.Add("@end", MySqlDbType.DateTime).Value = TimeZoneInfo.ConvertTimeToUtc(appointment.Start.AddMinutes(45), TimeZoneInfo.Local);
                 cmd.Parameters.Add("@createDate", MySqlDbType.DateTime).Value = DateTime.UtcNow;
                 cmd.Parameters.Add("@createdBy", MySqlDbType.VarChar, 50).Value = g.User.Username;
                 cmd.Parameters.Add("@lastUpdate", MySqlDbType.DateTime).Value = DateTime.UtcNow;
@@ -135,6 +184,56 @@ namespace jordan_rowland_c969.Database
                 cmd.Parameters.Add("@appointmentId", MySqlDbType.Int32).Value = appointmentId;
                 cmd.ExecuteNonQuery();
             }
+        }
+
+        public static bool GetOverlappingAppointments(DateTime utcStartTime)
+        {
+            string strStartTime = utcStartTime.ToString("yyyy-MM-dd HH:mm:ss");
+            string strEndTime = utcStartTime.AddMinutes(45).ToString("yyyy-MM-dd HH:mm:ss");
+
+            MySqlCommand query = new MySqlCommand(
+                $"SELECT * FROM appointment WHERE (" +
+                $"start < '{strStartTime}' AND '{strStartTime}' < end" +
+                $") OR (" +
+                $"start < '{strEndTime}' AND '{strEndTime}' < end" +
+                $")",
+                DBConnection.Conn
+            );
+
+            MySqlDataReader reader = query.ExecuteReader();
+            if (reader.Read())
+            {
+                Debug.WriteLine("\n\nGOT ONE\n\n");
+                reader.Close();
+                return true;
+            }
+            reader.Close();
+            return false;
+        }
+
+        public static bool GetOverlappingAppointments(DateTime utcStartTime, int appointmentID)
+        {
+            string strStartTime = utcStartTime.ToString("yyyy-MM-dd HH:mm:ss");
+            string strEndTime = utcStartTime.AddMinutes(45).ToString("yyyy-MM-dd HH:mm:ss");
+
+            MySqlCommand query = new MySqlCommand(
+                $"SELECT * FROM appointment WHERE ((" +
+                $"start < '{strStartTime}' AND '{strStartTime}' < end" +
+                $") OR (" +
+                $"start < '{strEndTime}' AND '{strEndTime}' < end" +
+                $")) AND appointmentId != {appointmentID}",
+                DBConnection.Conn
+            );
+
+            MySqlDataReader reader = query.ExecuteReader();
+            if (reader.Read())
+            {
+                Debug.WriteLine($"\n\nGOT ONE {reader.GetInt32(0)}\n\n");
+                reader.Close();
+                return true;
+            }
+            reader.Close();
+            return false;
         }
     }
 

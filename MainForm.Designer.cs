@@ -36,13 +36,14 @@
             this.btn_AddAppointment = new System.Windows.Forms.Button();
             this.btn_UpdateAppointment = new System.Windows.Forms.Button();
             this.btn_DeleteAppointment = new System.Windows.Forms.Button();
-            this.btn_Weekly = new System.Windows.Forms.Button();
+            this.btn_Day = new System.Windows.Forms.Button();
             this.btn_Monthly = new System.Windows.Forms.Button();
             this.btn_All = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.txt_User = new System.Windows.Forms.Label();
             this.btn_Exit = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
+            this.dt_Date = new System.Windows.Forms.DateTimePicker();
             ((System.ComponentModel.ISupportInitialize)(this.dg_Customers)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dg_Appointments)).BeginInit();
             this.SuspendLayout();
@@ -133,16 +134,16 @@
             this.btn_DeleteAppointment.UseVisualStyleBackColor = true;
             this.btn_DeleteAppointment.Click += new System.EventHandler(this.btn_DeleteAppointment_Click);
             // 
-            // btn_Weekly
+            // btn_Day
             // 
-            this.btn_Weekly.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_Weekly.Location = new System.Drawing.Point(12, 649);
-            this.btn_Weekly.Name = "btn_Weekly";
-            this.btn_Weekly.Size = new System.Drawing.Size(147, 40);
-            this.btn_Weekly.TabIndex = 8;
-            this.btn_Weekly.Text = "View Weekly";
-            this.btn_Weekly.UseVisualStyleBackColor = true;
-            this.btn_Weekly.Click += new System.EventHandler(this.btn_Weekly_Click);
+            this.btn_Day.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_Day.Location = new System.Drawing.Point(12, 649);
+            this.btn_Day.Name = "btn_Day";
+            this.btn_Day.Size = new System.Drawing.Size(147, 40);
+            this.btn_Day.TabIndex = 8;
+            this.btn_Day.Text = "View Day";
+            this.btn_Day.UseVisualStyleBackColor = true;
+            this.btn_Day.Click += new System.EventHandler(this.btn_Day_Click);
             // 
             // btn_Monthly
             // 
@@ -207,18 +208,27 @@
             this.label2.TabIndex = 12;
             this.label2.Text = "Appointments";
             // 
+            // dt_Date
+            // 
+            this.dt_Date.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dt_Date.Location = new System.Drawing.Point(12, 695);
+            this.dt_Date.Name = "dt_Date";
+            this.dt_Date.Size = new System.Drawing.Size(147, 30);
+            this.dt_Date.TabIndex = 41;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1073, 785);
+            this.Controls.Add(this.dt_Date);
             this.Controls.Add(this.btn_Exit);
             this.Controls.Add(this.txt_User);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.btn_All);
             this.Controls.Add(this.btn_Monthly);
-            this.Controls.Add(this.btn_Weekly);
+            this.Controls.Add(this.btn_Day);
             this.Controls.Add(this.btn_AddAppointment);
             this.Controls.Add(this.btn_UpdateAppointment);
             this.Controls.Add(this.btn_DeleteAppointment);
@@ -247,13 +257,14 @@
         private System.Windows.Forms.Button btn_AddAppointment;
         private System.Windows.Forms.Button btn_UpdateAppointment;
         private System.Windows.Forms.Button btn_DeleteAppointment;
-        private System.Windows.Forms.Button btn_Weekly;
+        private System.Windows.Forms.Button btn_Day;
         private System.Windows.Forms.Button btn_Monthly;
         private System.Windows.Forms.Button btn_All;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label txt_User;
         private System.Windows.Forms.Button btn_Exit;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.DateTimePicker dt_Date;
     }
 }
 

@@ -54,7 +54,7 @@
             // btn_Save
             // 
             this.btn_Save.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_Save.Location = new System.Drawing.Point(563, 355);
+            this.btn_Save.Location = new System.Drawing.Point(602, 354);
             this.btn_Save.Name = "btn_Save";
             this.btn_Save.Size = new System.Drawing.Size(144, 40);
             this.btn_Save.TabIndex = 18;
@@ -65,7 +65,7 @@
             // btn_Cancel
             // 
             this.btn_Cancel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_Cancel.Location = new System.Drawing.Point(755, 355);
+            this.btn_Cancel.Location = new System.Drawing.Point(794, 354);
             this.btn_Cancel.Name = "btn_Cancel";
             this.btn_Cancel.Size = new System.Drawing.Size(144, 40);
             this.btn_Cancel.TabIndex = 17;
@@ -178,7 +178,7 @@
             this.txt_Title.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txt_Title.Location = new System.Drawing.Point(194, 203);
             this.txt_Title.Name = "txt_Title";
-            this.txt_Title.Size = new System.Drawing.Size(270, 30);
+            this.txt_Title.Size = new System.Drawing.Size(309, 30);
             this.txt_Title.TabIndex = 32;
             // 
             // txt_Description
@@ -186,7 +186,7 @@
             this.txt_Description.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txt_Description.Location = new System.Drawing.Point(194, 249);
             this.txt_Description.Name = "txt_Description";
-            this.txt_Description.Size = new System.Drawing.Size(270, 30);
+            this.txt_Description.Size = new System.Drawing.Size(309, 30);
             this.txt_Description.TabIndex = 33;
             // 
             // txt_Location
@@ -194,7 +194,7 @@
             this.txt_Location.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txt_Location.Location = new System.Drawing.Point(194, 296);
             this.txt_Location.Name = "txt_Location";
-            this.txt_Location.Size = new System.Drawing.Size(270, 30);
+            this.txt_Location.Size = new System.Drawing.Size(309, 30);
             this.txt_Location.TabIndex = 34;
             // 
             // txt_Url
@@ -202,7 +202,7 @@
             this.txt_Url.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txt_Url.Location = new System.Drawing.Point(629, 203);
             this.txt_Url.Name = "txt_Url";
-            this.txt_Url.Size = new System.Drawing.Size(270, 30);
+            this.txt_Url.Size = new System.Drawing.Size(309, 30);
             this.txt_Url.TabIndex = 37;
             // 
             // txt_Contact
@@ -210,7 +210,7 @@
             this.txt_Contact.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txt_Contact.Location = new System.Drawing.Point(629, 108);
             this.txt_Contact.Name = "txt_Contact";
-            this.txt_Contact.Size = new System.Drawing.Size(270, 30);
+            this.txt_Contact.Size = new System.Drawing.Size(309, 30);
             this.txt_Contact.TabIndex = 35;
             // 
             // dt_Date
@@ -218,7 +218,7 @@
             this.dt_Date.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.dt_Date.Location = new System.Drawing.Point(629, 249);
             this.dt_Date.Name = "dt_Date";
-            this.dt_Date.Size = new System.Drawing.Size(270, 30);
+            this.dt_Date.Size = new System.Drawing.Size(309, 30);
             this.dt_Date.TabIndex = 40;
             // 
             // cbo_Customer
@@ -228,7 +228,7 @@
             this.cbo_Customer.FormattingEnabled = true;
             this.cbo_Customer.Location = new System.Drawing.Point(194, 111);
             this.cbo_Customer.Name = "cbo_Customer";
-            this.cbo_Customer.Size = new System.Drawing.Size(270, 31);
+            this.cbo_Customer.Size = new System.Drawing.Size(309, 31);
             this.cbo_Customer.TabIndex = 42;
             this.cbo_Customer.ValueMember = "Id";
             // 
@@ -239,7 +239,7 @@
             this.cbo_User.FormattingEnabled = true;
             this.cbo_User.Location = new System.Drawing.Point(194, 156);
             this.cbo_User.Name = "cbo_User";
-            this.cbo_User.Size = new System.Drawing.Size(270, 31);
+            this.cbo_User.Size = new System.Drawing.Size(309, 31);
             this.cbo_User.TabIndex = 43;
             this.cbo_User.ValueMember = "Id";
             // 
@@ -250,7 +250,7 @@
             this.cbo_Type.FormattingEnabled = true;
             this.cbo_Type.Location = new System.Drawing.Point(629, 156);
             this.cbo_Type.Name = "cbo_Type";
-            this.cbo_Type.Size = new System.Drawing.Size(270, 31);
+            this.cbo_Type.Size = new System.Drawing.Size(309, 31);
             this.cbo_Type.TabIndex = 45;
             this.cbo_Type.ValueMember = "ID";
             // 
@@ -258,7 +258,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(991, 448);
+            this.ClientSize = new System.Drawing.Size(1011, 448);
             this.Controls.Add(this.cbo_Type);
             this.Controls.Add(this.cbo_User);
             this.Controls.Add(this.cbo_Customer);

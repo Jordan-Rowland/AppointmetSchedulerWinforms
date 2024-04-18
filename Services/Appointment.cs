@@ -27,9 +27,11 @@ namespace jordan_rowland_c969.Services
         {
             // Check against Eastern timezone, 9am-5pm
             TimeZoneInfo estZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
-            DateTime utcStartTime= TimeZoneInfo.ConvertTimeToUtc(this.Start, TimeZoneInfo.Local);
+            DateTime utcStartTime = TimeZoneInfo.ConvertTimeToUtc(this.Start, TimeZoneInfo.Local);
             DateTime estStartTime = TimeZoneInfo.ConvertTimeFromUtc(utcStartTime, estZone);
 
+            // Put these validations in the update method too
+            // Also don't allow scheduling in the past
             if (
                 estStartTime.Hour < 9
                 || estStartTime.Hour > 17
@@ -40,8 +42,16 @@ namespace jordan_rowland_c969.Services
                 throw new Exception("Cannot schedule outside of business hours.");
             }
 
+            if (Database.Appointment.GetOverlappingAppointments(utcStartTime))
+                throw new Exception(
+                    "There is already an appointment scheduled during this time.\n" +
+                    "Please select another time."
+                );
+
             Database.Appointment.Create(g, this);
         }
+
+
         public static Appointment GetAppointment(int appointmentID)
         {
             AppointmentStruct appointmentStruct = Database.Appointment.GetAppointment(appointmentID);
@@ -62,8 +72,21 @@ namespace jordan_rowland_c969.Services
             };
         }
 
-        public void Update(Global g) => // Capture the exception if it bubbles up
+        // May not need this.
+        public static List<AppointmentStruct> GetAppointments() => Database.Appointment.GetAppointments();
+
+        public void Update(Global g)
+        {
+            DateTime utcStartTime = TimeZoneInfo.ConvertTimeToUtc(this.Start, TimeZoneInfo.Local);
+            // Need to ensure it doesn't flag for overlapping with self
+            if (Database.Appointment.GetOverlappingAppointments(utcStartTime, AppointmentId))
+                throw new Exception(
+                    "There is already an appointment scheduled during this time.\n" +
+                    "Please select another time."
+                );
+            // Capture the exception if it bubbles up
             Database.Appointment.Update(g, this);
+        }
 
         public static void Delete(int appointmentId) => // Capture the exception if it bubbles up
             Database.Appointment.Delete(appointmentId);
