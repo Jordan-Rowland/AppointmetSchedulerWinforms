@@ -16,8 +16,6 @@ namespace jordan_rowland_c969
         {
             InitializeComponent();
             g = global;
-            dt_Date.Format = DateTimePickerFormat.Custom;
-            dt_Date.CustomFormat = "MM/dd/yyyy hh:mm:ss";
             ConfigureForm();
         }
 
@@ -42,15 +40,22 @@ namespace jordan_rowland_c969
 
         private void ConfigureForm()
         {
-            // Comboc boxes need to be read-only
+            // Combo boxes need to be read-only
             dt_Date.Format = DateTimePickerFormat.Custom;
             dt_Date.CustomFormat = "MM/dd/yyyy hh:mm:ss tt";
-            List<CustomerStruct> customers = Database.Customer.GetCustomers();
-            List<ComboItem> customerDataSource = new List<ComboItem>();
-            foreach (var c in customers) customerDataSource.Add(new ComboItem { Id = c.Id, Text = c.Name });
-            cbo_Customer.DataSource = customerDataSource;
 
-            cbo_User.DataSource = FormHelpers.GetUserDataSource();
+            try
+            {
+                List<CustomerStruct> customers = Customer.GetCustomers();
+                List<ComboItem> customerDataSource = new List<ComboItem>();
+                foreach (var c in customers) customerDataSource.Add(new ComboItem { Id = c.Id, Text = c.Name });
+                cbo_Customer.DataSource = customerDataSource;
+                cbo_User.DataSource = FormHelpers.GetUserDataSource();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
 
             cbo_Type.DataSource = new ComboItem[]
             {
@@ -62,40 +67,41 @@ namespace jordan_rowland_c969
             };
         }
 
-        private void AddEditAppointment_Load(object sender, EventArgs e)
-        {
 
-        }
-
-        private void btn_Cancel_Click(object sender, EventArgs e)
-        {
-            Close();
-        }
+        private void btn_Cancel_Click(object sender, EventArgs e) => Close();
 
 
         private void btn_Save_Click(object sender, EventArgs e)
         {
             // In one instance, appt didn't seem to save. Ensure this works. 
-            Services.Appointment appointment = new Services.Appointment()
+            try
             {
-                CustomerId = Convert.ToInt32(cbo_Customer.SelectedValue),
-                UserId = Convert.ToInt32(cbo_User.SelectedValue),
-                Title = txt_Title.Text,
-                Description = txt_Description.Text,
-                Location = txt_Location.Text,
-                Contact = txt_Contact.Text,
-                Type = cbo_Type.Text,
-                Url = txt_Url.Text,
-                Start = dt_Date.Value,
-            };
+                Services.Appointment appointment = new Services.Appointment()
+                {
+                    CustomerId = Convert.ToInt32(cbo_Customer.SelectedValue),
+                    UserId = Convert.ToInt32(cbo_User.SelectedValue),
+                    Title = txt_Title.Text,
+                    Description = txt_Description.Text,
+                    Location = txt_Location.Text,
+                    Contact = txt_Contact.Text,
+                    Type = cbo_Type.Text,
+                    Url = txt_Url.Text,
+                    Start = dt_Date.Value,
+                };
 
-            if (EditMode)
-            {
-                appointment.AppointmentId = AppointmentId;
-                appointment.Update(g);
+                if (EditMode)
+                {
+                    appointment.AppointmentId = AppointmentId;
+                    appointment.Update(g);
+                }
+                else appointment.Create(g);
+
+                Close();
             }
-            else appointment.Create(g);
-            Close();
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
     }

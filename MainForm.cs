@@ -13,7 +13,6 @@ namespace jordan_rowland_c969
     public partial class MainForm : Form
     {
 
-        //Global Global { get; set; } = new Global() { User = (9, "test 5") };
         Global Global { get; set; } = new Global() { User = (2, "test2") };
         //Global Global { get; set; }  // Keep this
 
@@ -56,52 +55,66 @@ namespace jordan_rowland_c969
 
         private void btn_AddCustomer_Click(object sender, EventArgs e)
         {
-            AddEditCustomerForm addEditCustomer = new AddEditCustomerForm(Global);
-            addEditCustomer.ShowDialog();
-            FormHelpers.FillDataGrid(dg_Customers, new MySqlDataAdapter("SELECT * FROM customer;", DBInit.Conn));
+            try
+            {
+                AddEditCustomerForm addEditCustomer = new AddEditCustomerForm(Global);
+                addEditCustomer.ShowDialog();
+                FormHelpers.FillDataGrid(dg_Customers, new MySqlDataAdapter("SELECT * FROM customer;", DBInit.Conn));
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
 
         private void btn_UpdateCustomer_Click(object sender, EventArgs e)
         {
-            int id = (int)dg_Customers.SelectedRows[0].Cells["customerId"].Value;
-            Services.Customer customer = Services.Customer.GetCustomer(id);
-            AddEditCustomerForm addEditCustomer = new AddEditCustomerForm(Global, customer);
+            if (dg_Customers.SelectedRows.Count >= 1)
+            {
+                // Will need to update customerId when queries are updated
+                int id = (int)dg_Customers.SelectedRows[0].Cells["customerId"].Value;
+                Services.Customer customer = Services.Customer.GetCustomer(id);
+                AddEditCustomerForm addEditCustomer = new AddEditCustomerForm(Global, customer);
 
-            try
-            {
-                addEditCustomer.ShowDialog();
-                FormHelpers.FillDataGrid(
-                    dg_Customers,
-                    new MySqlDataAdapter("SELECT * FROM customer;", DBInit.Conn)
-                );
+                try
+                {
+                    addEditCustomer.ShowDialog();
+                    FormHelpers.FillDataGrid(
+                        dg_Customers,
+                        new MySqlDataAdapter("SELECT * FROM customer;", DBInit.Conn)
+                    );
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
+            else MessageBox.Show("No Customer Selected");
         }
 
 
         private void btn_DeleteCustomer_Click(object sender, EventArgs e)
         {
-            try
+            if (dg_Customers.SelectedRows.Count >= 1)
             {
-                // SelectedRows.Any() should solve an issue if nothing is selected.
-                int id = (int)dg_Customers.SelectedRows[0].Cells["CustomerId"].Value;
-                string message = "Delete customer?";
-                string caption = "Click Yes or No to confirm";
-                MessageBoxButtons buttons = MessageBoxButtons.YesNo;
-                DialogResult result;
-                result = MessageBox.Show(message, caption, buttons);
-                if (result == DialogResult.Yes) Services.Customer.Delete(id);
-                FormHelpers.FillDataGrid(dg_Customers, new MySqlDataAdapter("SELECT * FROM customer;", DBInit.Conn));
+                try
+                {
+                    int id = (int)dg_Customers.SelectedRows[0].Cells["CustomerId"].Value;
+                    string message = "Delete customer?";
+                    string caption = "Click Yes or No to confirm";
+                    MessageBoxButtons buttons = MessageBoxButtons.YesNo;
+                    DialogResult result;
+                    result = MessageBox.Show(message, caption, buttons);
+                    if (result == DialogResult.Yes) Services.Customer.Delete(id);
+                    FormHelpers.FillDataGrid(dg_Customers, new MySqlDataAdapter("SELECT * FROM customer;", DBInit.Conn));
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
             }
-            catch (Exception ex)
-            {
-                // Probably need to account for other errors
-                MessageBox.Show(ex.Message);
-            }
+            else MessageBox.Show("No Customer Selected");
         }
 
 
@@ -115,9 +128,6 @@ namespace jordan_rowland_c969
             }
             catch (Exception ex)
             {
-                // Maybe this should go in the AddEditAppointment form so the form doesn't close prematurely on an error
-                
-                //Also comment this out and try to track down the bugs related to this
                 MessageBox.Show(ex.Message);
             }
         }
@@ -125,42 +135,46 @@ namespace jordan_rowland_c969
 
         private void btn_UpdateAppointment_Click(object sender, EventArgs e)
         {
-            //try
-            //{
-                int id = (int)dg_Appointments.SelectedRows[0].Cells["appointmentId"].Value;
-                Services.Appointment appointment = Services.Appointment.GetAppointment(id);
-                AddEditAppointmentForm addEditAppointment = new AddEditAppointmentForm(Global, appointment);
-                addEditAppointment.ShowDialog();
-                FormHelpers.FillDataGrid(dg_Appointments, new MySqlDataAdapter("SELECT * FROM appointment;", DBInit.Conn));
-            //}
-            //catch (Exception ex)
-            //{
-            //    MessageBox.Show(ex.Message);
-            //}
+            if (dg_Customers.SelectedRows.Count >= 1)
+            {
+                try
+                {
+                    int id = (int)dg_Appointments.SelectedRows[0].Cells["appointmentId"].Value;
+                    Services.Appointment appointment = Services.Appointment.GetAppointment(id);
+                    AddEditAppointmentForm addEditAppointment = new AddEditAppointmentForm(Global, appointment);
+                    addEditAppointment.ShowDialog();
+                    FormHelpers.FillDataGrid(dg_Appointments, new MySqlDataAdapter("SELECT * FROM appointment;", DBInit.Conn));
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
+            else MessageBox.Show("No Appointment Selected");
         }
 
 
         private void btn_DeleteAppointment_Click(object sender, EventArgs e)
         {
-
-            try
+            if (dg_Customers.SelectedRows.Count >= 1)
             {
-                // SelectedRows.Any() should solve an issue if nothing is selected.
-                int id = (int)dg_Appointments.SelectedRows[0].Cells["AppointmentId"].Value;
-                string message = "Delete Apointment?";
-                string caption = "Click Yes or No to confirm";
-                MessageBoxButtons buttons = MessageBoxButtons.YesNo;
-                DialogResult result;
-                result = MessageBox.Show(message, caption, buttons);
-                if (result == DialogResult.Yes) Services.Appointment.Delete(id);
-                FormHelpers.FillDataGrid(dg_Appointments, new MySqlDataAdapter("SELECT * FROM appointment;", DBInit.Conn));
+                try
+                {
+                    int id = (int)dg_Appointments.SelectedRows[0].Cells["AppointmentId"].Value;
+                    string message = "Delete Apointment?";
+                    string caption = "Click Yes or No to confirm";
+                    MessageBoxButtons buttons = MessageBoxButtons.YesNo;
+                    DialogResult result;
+                    result = MessageBox.Show(message, caption, buttons);
+                    if (result == DialogResult.Yes) Services.Appointment.Delete(id);
+                    FormHelpers.FillDataGrid(dg_Appointments, new MySqlDataAdapter("SELECT * FROM appointment;", DBInit.Conn));
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
             }
-            catch
-            {
-                // Probably need to account for other errors
-                MessageBox.Show("No Customer selected");
-            }
-
+            else MessageBox.Show("No Appointment Selected");
         }
 
 

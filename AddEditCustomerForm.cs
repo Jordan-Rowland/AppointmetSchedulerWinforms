@@ -69,8 +69,6 @@ namespace jordan_rowland_c969
 
         private void btn_Cancel_Click(object sender, EventArgs e) => Close();
 
-        private void AddEditCustomer_Load(object sender, EventArgs e) {}
-
         private void checkAndDisableSave()
         {
             List<string> fields = new List<string>()

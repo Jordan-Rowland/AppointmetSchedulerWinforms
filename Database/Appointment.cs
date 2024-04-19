@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using jordan_rowland_c969.Services;
@@ -258,6 +259,20 @@ namespace jordan_rowland_c969.Database
             }
             reader.Close();
             return false;
+        }
+
+
+        public static bool CheckForCustomerAppointments(int customerId)
+        {
+            MySqlCommand query = new MySqlCommand(
+                "select * FROM appointment WHERE customerId = @customerId", DBInit.Conn);
+            query.Parameters.Add("@customerId", MySqlDbType.Int32).Value = customerId;
+
+            MySqlDataReader reader = query.ExecuteReader();
+
+            if (reader.Read()) return true;
+            return false;
+
         }
     }
 

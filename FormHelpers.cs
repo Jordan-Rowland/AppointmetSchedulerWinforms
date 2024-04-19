@@ -50,7 +50,7 @@ namespace jordan_rowland_c969
 
         public static List<ComboItem> GetUserDataSource()
         {
-            List<UserStruct> users = Database.User.GetUsers();
+            List<UserStruct> users = User.GetUsers();
             List<ComboItem> userDataSource = new List<ComboItem>();
             foreach (var c in users) userDataSource.Add(new ComboItem { Id = c.Id, Text = c.Name });
             return userDataSource;

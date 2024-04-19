@@ -61,19 +61,24 @@ namespace jordan_rowland_c969.Services
             ValidateIncomingData();
             try
             {
-            Database.Customer.CreateUpdate(g, this, DBAction.UPDATE);
+                Database.Customer.CreateUpdate(g, this, DBAction.UPDATE);
             }
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
-}
+        }
 
 
         public static void Delete(int customerId)
         {
             try
             {
+                if (Database.Appointment.CheckForCustomerAppointments(customerId))
+                    throw new Exception(
+                        "This customer is assigned to one or more " +
+                        "appointments and cannot be deleted."
+                    );
                 Database.Customer.Delete(customerId);
             }
             catch (Exception ex)
