@@ -44,7 +44,7 @@
             this.btn_Exit = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.dt_Date = new System.Windows.Forms.DateTimePicker();
-            this.button1 = new System.Windows.Forms.Button();
+            this.btn_Generate = new System.Windows.Forms.Button();
             this.cbo_ReportType = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dg_Customers)).BeginInit();
@@ -219,16 +219,16 @@
             this.dt_Date.Size = new System.Drawing.Size(147, 30);
             this.dt_Date.TabIndex = 41;
             // 
-            // button1
+            // btn_Generate
             // 
-            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.Location = new System.Drawing.Point(600, 1);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(144, 40);
-            this.button1.TabIndex = 42;
-            this.button1.Text = "Generate";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.btn_Generate.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_Generate.Location = new System.Drawing.Point(600, 1);
+            this.btn_Generate.Name = "btn_Generate";
+            this.btn_Generate.Size = new System.Drawing.Size(144, 40);
+            this.btn_Generate.TabIndex = 42;
+            this.btn_Generate.Text = "Generate";
+            this.btn_Generate.UseVisualStyleBackColor = true;
+            this.btn_Generate.Click += new System.EventHandler(this.btn_Generate_Click);
             // 
             // cbo_ReportType
             // 
@@ -258,7 +258,7 @@
             this.ClientSize = new System.Drawing.Size(1073, 785);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.cbo_ReportType);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.btn_Generate);
             this.Controls.Add(this.dt_Date);
             this.Controls.Add(this.btn_Exit);
             this.Controls.Add(this.txt_User);
@@ -303,7 +303,7 @@
         private System.Windows.Forms.Button btn_Exit;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.DateTimePicker dt_Date;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btn_Generate;
         private System.Windows.Forms.ComboBox cbo_ReportType;
         private System.Windows.Forms.Label label3;
     }

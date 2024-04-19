@@ -20,13 +20,13 @@ namespace jordan_rowland_c969
         public MainForm(Global global)
         {
             // DO NOT DELETE, NEED ALL THIS
-            Global = global;
-            using (LoginForm loginForm = new LoginForm(DBInit.Conn, Global))
-            {
-                loginForm.ShowDialog();
-                if (!loginForm.LoginSuccessful) Environment.Exit(0);
-                Global = loginForm.Global;
-            }
+            //Global = global;
+            //using (LoginForm loginForm = new LoginForm(DBInit.Conn, Global))
+            //{
+            //    loginForm.ShowDialog();
+            //    if (!loginForm.LoginSuccessful) Environment.Exit(0);
+            //    Global = loginForm.Global;
+            //}
 
             InitializeComponent();
             txt_User.Text = $"Logged in as: {Global.User.Username}";
@@ -56,7 +56,6 @@ namespace jordan_rowland_c969
 
         private void btn_AddCustomer_Click(object sender, EventArgs e)
         {
-            // phone number should only have digits and dashes
             AddEditCustomerForm addEditCustomer = new AddEditCustomerForm(Global);
             addEditCustomer.ShowDialog();
             FormHelpers.FillDataGrid(dg_Customers, new MySqlDataAdapter("SELECT * FROM customer;", DBInit.Conn));
@@ -65,15 +64,10 @@ namespace jordan_rowland_c969
 
         private void btn_UpdateCustomer_Click(object sender, EventArgs e)
         {
-            // phone number should only have digits and dashes
             int id = (int)dg_Customers.SelectedRows[0].Cells["customerId"].Value;
             Services.Customer customer = Services.Customer.GetCustomer(id);
             AddEditCustomerForm addEditCustomer = new AddEditCustomerForm(Global, customer);
 
-            //bool validClose = false;
-
-            //while (!validClose) // Might not need all this stuff
-            //{
             try
             {
                 addEditCustomer.ShowDialog();
@@ -81,14 +75,12 @@ namespace jordan_rowland_c969
                     dg_Customers,
                     new MySqlDataAdapter("SELECT * FROM customer;", DBInit.Conn)
                 );
-                //validClose = true;
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
-        //}
-    }
+        }
 
 
         private void btn_DeleteCustomer_Click(object sender, EventArgs e)
@@ -205,7 +197,7 @@ namespace jordan_rowland_c969
         }
 
 
-        private void button1_Click(object sender, EventArgs e)
+        private void btn_Generate_Click(object sender, EventArgs e)
         {
             Debug.WriteLine(cbo_ReportType.ValueMember);
             Debug.WriteLine(cbo_ReportType.DisplayMember);

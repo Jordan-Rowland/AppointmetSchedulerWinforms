@@ -19,44 +19,69 @@ namespace jordan_rowland_c969.Services
 
         public void Create(Global g)
         {
-            // Capture the exception if it bubbles up
             ValidateIncomingData();
-            Database.Customer.CreateUpdate(g, this, DBAction.CREATE);
-    }
+            
+            try
+            {
+                Database.Customer.CreateUpdate(g, this, DBAction.CREATE);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+
+        }
 
 
         public static Customer GetCustomer(int customerId)
         {
-            // Capture the exception if it bubbles up
-            CustomerStruct customerStruct = Database.Customer.GetCustomer(customerId);
-            return new Customer()
+            try
             {
-                Id = customerStruct.Id,
-                Name = customerStruct.Name,
-                Address = customerStruct.Address,
-                City = customerStruct.City,
-                Country = customerStruct.Country,
-                Phone = customerStruct.Phone,
-            };
-        }
+                CustomerStruct customerStruct = Database.Customer.GetCustomer(customerId);
+                return new Customer()
+                {
+                    Id = customerStruct.Id,
+                    Name = customerStruct.Name,
+                    Address = customerStruct.Address,
+                    City = customerStruct.City,
+                    Country = customerStruct.Country,
+                    Phone = customerStruct.Phone,
+                };
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
 
-        //public static List<Customer> GetCustomers()
-        //{
-        //    // Capture the exception if it bubbles up
-        //    CustomerStruct List<customerStruct> = Database.Customer.GetCustomers(customerId);
-        //}
+        }
 
         
         public void Update(Global g)
         {
-            // Capture the exception if it bubbles up
             ValidateIncomingData();
+            try
+            {
             Database.Customer.CreateUpdate(g, this, DBAction.UPDATE);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+}
+
+
+        public static void Delete(int customerId)
+        {
+            try
+            {
+                Database.Customer.Delete(customerId);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+
         }
-
-
-        public static void Delete(int customerId) => // Capture the exception if it bubbles up
-            Database.Customer.Delete(customerId);
 
 
         public void ValidateIncomingData()

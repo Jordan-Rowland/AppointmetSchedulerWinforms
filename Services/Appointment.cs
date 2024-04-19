@@ -27,7 +27,15 @@ namespace jordan_rowland_c969.Services
         public void Create(Global g)
         {
             ValidateDates(DBAction.CREATE);
-            Database.Appointment.CreateUpdate(g, this, DBAction.CREATE);
+
+            try
+            {
+                Database.Appointment.CreateUpdate(g, this, DBAction.CREATE);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
 
@@ -52,20 +60,34 @@ namespace jordan_rowland_c969.Services
         }
 
 
-
-        // May not need this.
-        public static List<AppointmentStruct> GetAppointments() => Database.Appointment.GetAppointments();
-
-
         public void Update(Global g)
         {
             ValidateDates(DBAction.UPDATE, this.AppointmentId);
-            Database.Appointment.CreateUpdate(g, this, DBAction.UPDATE);
+
+            try
+            {
+                Database.Appointment.CreateUpdate(g, this, DBAction.UPDATE);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
 
-        public static void Delete(int appointmentId) => // Capture the exception if it bubbles up
-            Database.Appointment.Delete(appointmentId);
+        public static void Delete(int appointmentId)
+        {
+
+            try
+            {
+                Database.Appointment.Delete(appointmentId);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+
+        }
 
 
         public void ValidateDates(DBAction action, int? appointmentID = null)
