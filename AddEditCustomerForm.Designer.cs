@@ -82,6 +82,7 @@
             this.txt_Name.Name = "txt_Name";
             this.txt_Name.Size = new System.Drawing.Size(202, 28);
             this.txt_Name.TabIndex = 19;
+            this.txt_Name.TextChanged += new System.EventHandler(this.txt_Name_TextChanged);
             // 
             // label1
             // 
@@ -100,6 +101,7 @@
             this.txt_Address.Name = "txt_Address";
             this.txt_Address.Size = new System.Drawing.Size(202, 28);
             this.txt_Address.TabIndex = 21;
+            this.txt_Address.TextChanged += new System.EventHandler(this.txt_Address_TextChanged);
             // 
             // label2
             // 
@@ -118,6 +120,7 @@
             this.txt_City.Name = "txt_City";
             this.txt_City.Size = new System.Drawing.Size(202, 28);
             this.txt_City.TabIndex = 23;
+            this.txt_City.TextChanged += new System.EventHandler(this.txt_City_TextChanged);
             // 
             // label3
             // 
@@ -136,6 +139,7 @@
             this.txt_Country.Name = "txt_Country";
             this.txt_Country.Size = new System.Drawing.Size(202, 28);
             this.txt_Country.TabIndex = 25;
+            this.txt_Country.TextChanged += new System.EventHandler(this.txt_Country_TextChanged);
             // 
             // label4
             // 
@@ -154,6 +158,7 @@
             this.txt_PhoneNumber.Name = "txt_PhoneNumber";
             this.txt_PhoneNumber.Size = new System.Drawing.Size(202, 28);
             this.txt_PhoneNumber.TabIndex = 27;
+            this.txt_PhoneNumber.TextChanged += new System.EventHandler(this.txt_PhoneNumber_TextChanged);
             // 
             // label5
             // 
@@ -165,7 +170,7 @@
             this.label5.TabIndex = 26;
             this.label5.Text = "Phone Number";
             // 
-            // AddEditCustomer
+            // AddEditCustomerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -183,7 +188,7 @@
             this.Controls.Add(this.lbl_Title);
             this.Controls.Add(this.btn_Save);
             this.Controls.Add(this.btn_Cancel);
-            this.Name = "AddEditCustomer";
+            this.Name = "AddEditCustomerForm";
             this.Text = "AddEditCustomer";
             this.Load += new System.EventHandler(this.AddEditCustomer_Load);
             this.ResumeLayout(false);

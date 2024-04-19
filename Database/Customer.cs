@@ -10,6 +10,7 @@ namespace jordan_rowland_c969.Database
         public static void CreateUpdate(Global g, Services.Customer customer, DBAction action)
         {
             MySqlCommand cmd = new MySqlCommand();
+
             int countryId = Country.Create(g, customer.Country);
             int cityId = City.Create(g, customer.City, countryId);
             int addressId = Address.Create(g, customer.Address, cityId, customer.Phone);

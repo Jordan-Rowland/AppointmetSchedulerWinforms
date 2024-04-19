@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-
+using jordan_rowland_c969.Services;
 using MySql.Data.MySqlClient;
 
 
@@ -12,6 +12,9 @@ namespace jordan_rowland_c969.Database
         public static void CreateUpdate(Global g, Services.Appointment appointment, DBAction action)
         {
             MySqlCommand cmd = new MySqlCommand();
+
+            Debug.WriteLine(TimeZoneInfo.ConvertTimeToUtc(appointment.Start, TimeZoneInfo.Local));
+
             if (action == DBAction.CREATE)
             {
                 cmd = new MySqlCommand(
@@ -28,6 +31,8 @@ namespace jordan_rowland_c969.Database
             {
                 cmd = new MySqlCommand(
                     "UPDATE appointment SET " +
+                    "customerId = @customerId, " +
+                    "userId = @userId, " +
                     "title = @title, " +
                     "description = @description, " +
                     "location = @location, " +
@@ -70,12 +75,6 @@ namespace jordan_rowland_c969.Database
             }
         }
 
-        //private static string NormalizeStringLength(string value, int? maxLength = null, string defaultValue = "")
-        //{
-        //    if (value == "") return defaultValue;
-        //    if (value.Length < maxLength || maxLength == null) return value;
-        //    return value.Substring(0, maxLength.Value);
-        //}
 
         public static AppointmentStruct GetAppointment(int appointmentId)
         {
@@ -198,7 +197,6 @@ namespace jordan_rowland_c969.Database
             MySqlDataReader reader = query.ExecuteReader();
             if (reader.Read())
             {
-                Debug.WriteLine("\n\nGOT ONE\n\n");
                 reader.Close();
                 return true;
             }
@@ -213,7 +211,7 @@ namespace jordan_rowland_c969.Database
             string strEndTime = utcStartTime.AddMinutes(45).ToString("yyyy-MM-dd HH:mm:ss");
 
             MySqlCommand query = new MySqlCommand(
-                $"SELECT * FROM appointment WHERE ((" +
+                $"SELECT start, end FROM appointment WHERE ((" +
                 $"start < '{strStartTime}' AND '{strStartTime}' < end" +
                 $") OR (" +
                 $"start < '{strEndTime}' AND '{strEndTime}' < end" +
@@ -225,6 +223,36 @@ namespace jordan_rowland_c969.Database
             if (reader.Read())
             {
                 Debug.WriteLine($"\n\nGOT ONE {reader.GetInt32(0)}\n\n");
+                reader.Close();
+                return true;
+            }
+            reader.Close();
+            return false;
+        }
+
+        public static bool CheckUpcomingAppointments(int userId)
+        {
+            DateTime utcNow = DateTime.UtcNow;
+            DateTime utcNowPlus15 = utcNow.AddMinutes(15);
+
+            MySqlCommand query = new MySqlCommand(
+                "SELECT * FROM appointment WHERE userId = @userId " +
+                "AND start > @utcNow AND start < @utcNowPlus15",
+            DBInit.Conn
+            );
+
+            query.Parameters.Add("@userId", MySqlDbType.Int32).Value = userId;
+            query.Parameters.Add("@utcNow", MySqlDbType.VarChar, 40).Value = utcNow.ToString("yyyy-MM-dd HH:mm:ss");
+            query.Parameters.Add("@utcNowPlus15", MySqlDbType.VarChar, 40).Value = utcNowPlus15.ToString("yyyy-MM-dd HH:mm:ss");
+
+            Debug.WriteLine("SELECT * FROM appointment " +
+                $"WHERE userId = {userId} " +
+                $"AND start BETWEEN DATE('{utcNow.ToString("yyyy-MM-dd HH:mm:ss")}') " +
+                $"AND DATE('{utcNowPlus15.ToString("yyyy-MM-dd HH:mm:ss")}')");
+
+            MySqlDataReader reader = query.ExecuteReader();
+            if (reader.Read())
+            {
                 reader.Close();
                 return true;
             }
