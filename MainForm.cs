@@ -18,11 +18,9 @@ namespace jordan_rowland_c969
 
         public MainForm(Global global)
         {
-            //CultureInfo.CurrentCulture
-
             //// DO NOT DELETE, NEED ALL THIS
             //Global = global;
-            //using (LoginForm loginForm = new LoginForm(DBConnection.Conn, Global))
+            //using (LoginForm loginForm = new LoginForm(DBInit.Conn, Global))
             //{
             //    loginForm.ShowDialog();
             //    if (!loginForm.LoginSuccessful) Environment.Exit(0);
@@ -40,7 +38,7 @@ namespace jordan_rowland_c969
             {
                 new ComboItem{ Id = 1, Text = "Appointment Types Per Month" },
                 new ComboItem{ Id = 2, Text = "User Schedules" },
-                new ComboItem{ Id = 3, Text = "Interview" },
+                new ComboItem{ Id = 3, Text = "Number of Customer Appointments" },
             };
         }
 

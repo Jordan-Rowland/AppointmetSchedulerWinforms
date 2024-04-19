@@ -83,6 +83,7 @@ namespace jordan_rowland_c969.Services
                 || estStartTime.DayOfWeek == DayOfWeek.Sunday
                 )
             {
+                // Received an error when editing Appt 1, make sure this is valid
                 throw new Exception("Cannot schedule outside of Monday - Friday, 9am - 5pm Eastern Time.");
             }
 
