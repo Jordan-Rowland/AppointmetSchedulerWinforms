@@ -1,21 +1,14 @@
-﻿using jordan_rowland_c969.Database;
-using jordan_rowland_c969.Services;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+
 
 namespace jordan_rowland_c969
 {
     public partial class AddEditCustomerForm : Form
     {
-        bool EditMode = false;
-        int customerId { get; set; }
+        readonly bool EditMode = false;
+        int CustomerId { get; set; }
         Global g { get; set; }
 
         public AddEditCustomerForm(Global global)
@@ -30,7 +23,7 @@ namespace jordan_rowland_c969
             g = global;
             InitializeComponent();
             EditMode = true;
-            customerId = customer.Id;
+            CustomerId = customer.Id;
             lbl_Title.Text = "Update Customer";
             txt_Name.Text = customer.Name;
             txt_Address.Text = customer.Address;
@@ -55,7 +48,7 @@ namespace jordan_rowland_c969
 
                 if (EditMode)
                 {
-                    customer.Id = customerId;
+                    customer.Id = CustomerId;
                     customer.Update(g);
                 }
                 else customer.Create(g);
@@ -96,5 +89,10 @@ namespace jordan_rowland_c969
         private void txt_City_TextChanged(object sender, EventArgs e) => checkAndDisableSave();
         private void txt_Country_TextChanged(object sender, EventArgs e) => checkAndDisableSave();
         private void txt_PhoneNumber_TextChanged(object sender, EventArgs e) => checkAndDisableSave();
+
+        private void AddEditCustomerForm_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

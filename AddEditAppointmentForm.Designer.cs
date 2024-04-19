@@ -282,6 +282,7 @@
             this.Controls.Add(this.btn_Cancel);
             this.Name = "AddEditAppointmentForm";
             this.Text = "AddEditAppointment";
+            this.Load += new System.EventHandler(this.AddEditAppointmentForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

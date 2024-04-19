@@ -60,11 +60,11 @@
             // 
             this.lbl_SelectUser.AutoSize = true;
             this.lbl_SelectUser.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_SelectUser.Location = new System.Drawing.Point(196, 73);
+            this.lbl_SelectUser.Location = new System.Drawing.Point(144, 73);
             this.lbl_SelectUser.Name = "lbl_SelectUser";
-            this.lbl_SelectUser.Size = new System.Drawing.Size(119, 25);
+            this.lbl_SelectUser.Size = new System.Drawing.Size(172, 25);
             this.lbl_SelectUser.TabIndex = 4;
-            this.lbl_SelectUser.Text = "Select User:";
+            this.lbl_SelectUser.Text = "Select Consultant:";
             this.lbl_SelectUser.Visible = false;
             // 
             // cbo_User

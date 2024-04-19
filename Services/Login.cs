@@ -22,7 +22,6 @@ namespace jordan_rowland_c969.Services
             MySqlDataReader reader = query.ExecuteReader();
 
             (bool result, Global g) results = (false, new Global());
-            // TODO: Throw an exception here instead 
             if (reader.Read())
             {
                 results = (true, new Global() { User = (reader.GetInt32(0), reader.GetString(1)) });

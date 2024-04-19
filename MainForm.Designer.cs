@@ -277,6 +277,7 @@
             this.Controls.Add(this.dg_Customers);
             this.Name = "MainForm";
             this.Text = "Main";
+            this.Load += new System.EventHandler(this.MainForm_Load);
             this.Shown += new System.EventHandler(this.MainForm_Shown);
             ((System.ComponentModel.ISupportInitialize)(this.dg_Customers)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dg_Appointments)).EndInit();

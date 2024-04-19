@@ -13,6 +13,7 @@ namespace jordan_rowland_c969
         public ReportForm(Global g, (int Id, string Name) reportType)
         {
             InitializeComponent();
+            cbo_User.DropDownStyle = ComboBoxStyle.DropDownList;
 
             MySqlDataAdapter adp = new MySqlDataAdapter();
             if (reportType.Id == 1)
@@ -31,7 +32,6 @@ namespace jordan_rowland_c969
 
                 cbo_User.DataSource = FormHelpers.GetUserDataSource();
 
-                // Set initially with Current User
                 int userId = Convert.ToInt32(cbo_User.SelectedValue);
                 MySqlCommand query = GetUserAppointmentsQuery(userId);
                 adp = new MySqlDataAdapter(query);
@@ -61,9 +61,9 @@ namespace jordan_rowland_c969
         };
 
 
-        private readonly Func<string, string> GetReportName =
-            report => $"Report: {report}";
-        private readonly Func<string, MySqlDataAdapter> CreateReportAdapter =
+        private readonly Func<string, string> GetReportName = report => $"Report: {report}";
+
+        private readonly Func<string, MySqlDataAdapter> CreateReportAdapter = 
             query => new MySqlDataAdapter(query, DBInit.Conn);
 
 

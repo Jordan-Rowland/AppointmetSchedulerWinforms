@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
-using jordan_rowland_c969.Services;
+
 using MySql.Data.MySqlClient;
 
 
@@ -47,7 +46,6 @@ namespace jordan_rowland_c969.Database
                     "WHERE appointmentId = @appointmentId",
                     DBInit.Conn);
             }
-            // Try/catch here/ but maybe do it above instead
             using (cmd)
             {
                 cmd.Parameters.Add("@customerId", MySqlDbType.Int32).Value = appointment.CustomerId;
@@ -121,7 +119,6 @@ namespace jordan_rowland_c969.Database
             return appointment;
         }
 
-        // Might not need this
         public static List<AppointmentStruct> GetAppointments()
         {
             MySqlCommand query = new MySqlCommand(
@@ -292,7 +289,4 @@ namespace jordan_rowland_c969.Database
         public string Url { get; set; }
         public DateTime Start { get; set; }
     }
-
-
-    //public enum DBAction { CREATE, UPDATE };
 }

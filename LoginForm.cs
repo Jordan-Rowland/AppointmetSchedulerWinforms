@@ -48,7 +48,7 @@ namespace jordan_rowland_c969
 
         private void btn_Login_Click(object sender, EventArgs e)
         {
-            (bool result, Global global) = Services.Login.ValidateLogin(Conn, txt_Username.Text, txt_Password.Text);
+            (bool result, Global global) = Login.ValidateLogin(Conn, txt_Username.Text, txt_Password.Text);
             
             if (!result) MessageBox.Show(ErrorMessage);
             else

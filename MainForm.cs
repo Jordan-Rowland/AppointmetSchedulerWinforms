@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Data;
 using System.Windows.Forms;
 
 using MySql.Data.MySqlClient;
@@ -34,10 +33,11 @@ namespace jordan_rowland_c969
             FormHelpers.FillDataGrid(dg_Customers, new MySqlDataAdapter("SELECT * FROM customer;", DBInit.Conn));
             FormHelpers.FillDataGrid(dg_Appointments, new MySqlDataAdapter("SELECT * FROM appointment;", DBInit.Conn));
 
+            cbo_ReportType.DropDownStyle = ComboBoxStyle.DropDownList;
             cbo_ReportType.DataSource = new ComboItem[]
             {
                 new ComboItem{ Id = 1, Text = "Appointment Types Per Month" },
-                new ComboItem{ Id = 2, Text = "User Schedules" },
+                new ComboItem{ Id = 2, Text = "Consultant Schedules" },
                 new ComboItem{ Id = 3, Text = "Number of Customer Appointments" },
             };
         }
@@ -219,5 +219,9 @@ namespace jordan_rowland_c969
             reportForm.ShowDialog();
         }
 
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

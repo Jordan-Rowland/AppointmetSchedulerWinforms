@@ -16,7 +16,6 @@ namespace jordan_rowland_c969.Database
             int addressId = Address.Create(g, customer.Address, cityId, customer.Phone);
             if (action == DBAction.CREATE)
             {
-                // Try/catch here/ but maybe do it above instead
                 cmd = new MySqlCommand(
                     "INSERT INTO customer (" +
                     "customerName, addressId, active, createDate, createdBy, lastUpdate, lastUpdateBy" +

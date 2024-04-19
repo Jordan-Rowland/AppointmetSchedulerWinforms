@@ -8,7 +8,7 @@ namespace jordan_rowland_c969
 {
     public partial class AddEditAppointmentForm : Form
     {
-        bool EditMode = false;
+        readonly bool EditMode = false;
         int AppointmentId { get; set; }
         Global g { get; set; }
 
@@ -40,7 +40,9 @@ namespace jordan_rowland_c969
 
         private void ConfigureForm()
         {
-            // Combo boxes need to be read-only
+            cbo_Customer.DropDownStyle = ComboBoxStyle.DropDownList;
+            cbo_User.DropDownStyle = ComboBoxStyle.DropDownList;
+
             dt_Date.Format = DateTimePickerFormat.Custom;
             dt_Date.CustomFormat = "MM/dd/yyyy hh:mm:ss tt";
 
@@ -104,5 +106,9 @@ namespace jordan_rowland_c969
             }
         }
 
+        private void AddEditAppointmentForm_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

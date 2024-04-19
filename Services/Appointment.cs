@@ -96,7 +96,6 @@ namespace jordan_rowland_c969.Services
             DateTime utcStartTime = TimeZoneInfo.ConvertTimeToUtc(this.Start, TimeZoneInfo.Local);
             DateTime estStartTime = TimeZoneInfo.ConvertTimeFromUtc(utcStartTime, estZone);
 
-            // Also don't allow scheduling in the past
 
             if (
                 estStartTime.Hour < 9

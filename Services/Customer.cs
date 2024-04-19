@@ -108,7 +108,6 @@ namespace jordan_rowland_c969.Services
                     $"The following fields can not be empty: {string.Join(", ", invalidFields)}"
                 );
 
-            // Capture the exception if it bubbles up
             ValidatePhoneNumber(Phone);
         }
 

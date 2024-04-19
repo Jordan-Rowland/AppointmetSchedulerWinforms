@@ -148,7 +148,6 @@
     <Compile Include="Services\Appointment.cs" />
     <Compile Include="Services\Customer.cs" />
     <Compile Include="Services\Login.cs" />
-    <Compile Include="Services\User.cs" />
     <EmbeddedResource Include="AddEditAppointmentForm.resx">
       <DependentUpon>AddEditAppointmentForm.cs</DependentUpon>
     </EmbeddedResource>
