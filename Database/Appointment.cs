@@ -36,8 +36,6 @@ namespace jordan_rowland_c969.Database
                     "url = @url, " +
                     "start = @start, " +
                     "end = @end, " +
-                    "createDate = @createDate, " +
-                    "createdBy = @createdBy, " +
                     "lastUpdate = @lastUpdate, " +
                     "lastUpdateBy = @lastUpdateBy " +
                     "WHERE appointmentId = @appointmentId",
@@ -61,6 +59,7 @@ namespace jordan_rowland_c969.Database
 
                 if (action == DBAction.CREATE)
                 {
+                    // Had a crash when updating the Beat Farm row related to @createdDate
                     cmd.Parameters.Add("@createDate", MySqlDbType.DateTime).Value = DateTime.UtcNow;
                     cmd.Parameters.Add("@createdBy", MySqlDbType.VarChar, 40).Value = DBHelper.NormalizeStringLength(g.User.Username, 40);
                 }

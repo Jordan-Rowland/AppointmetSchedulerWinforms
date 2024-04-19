@@ -104,17 +104,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AddEditAppointment.cs">
+    <Compile Include="AddEditAppointmentForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AddEditAppointment.Designer.cs">
-      <DependentUpon>AddEditAppointment.cs</DependentUpon>
+    <Compile Include="AddEditAppointmentForm.Designer.cs">
+      <DependentUpon>AddEditAppointmentForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="AddEditCustomer.cs">
+    <Compile Include="AddEditCustomerForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AddEditCustomer.Designer.cs">
-      <DependentUpon>AddEditCustomer.cs</DependentUpon>
+    <Compile Include="AddEditCustomerForm.Designer.cs">
+      <DependentUpon>AddEditCustomerForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Database\Address.cs" />
     <Compile Include="Database\Appointment.cs" />
@@ -123,6 +123,7 @@
     <Compile Include="Database\Customer.cs" />
     <Compile Include="Database\DBInit.cs" />
     <Compile Include="Database\User.cs" />
+    <Compile Include="FormHelpers.cs" />
     <Compile Include="Global.cs" />
     <Compile Include="LoginForm.cs">
       <SubType>Form</SubType>
@@ -138,15 +139,21 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReportForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ReportForm.Designer.cs">
+      <DependentUpon>ReportForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Services\Appointment.cs" />
     <Compile Include="Services\Customer.cs" />
     <Compile Include="Services\Login.cs" />
     <Compile Include="Services\User.cs" />
-    <EmbeddedResource Include="AddEditAppointment.resx">
-      <DependentUpon>AddEditAppointment.cs</DependentUpon>
+    <EmbeddedResource Include="AddEditAppointmentForm.resx">
+      <DependentUpon>AddEditAppointmentForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="AddEditCustomer.resx">
-      <DependentUpon>AddEditCustomer.cs</DependentUpon>
+    <EmbeddedResource Include="AddEditCustomerForm.resx">
+      <DependentUpon>AddEditCustomerForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="LoginForm.resx">
       <DependentUpon>LoginForm.cs</DependentUpon>
@@ -163,6 +170,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="ReportForm.resx">
+      <DependentUpon>ReportForm.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

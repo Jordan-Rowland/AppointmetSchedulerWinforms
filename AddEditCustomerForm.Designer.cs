@@ -1,6 +1,6 @@
 ﻿namespace jordan_rowland_c969
 {
-    partial class AddEditCustomer
+    partial class AddEditCustomerForm
     {
         /// <summary>
         /// Required designer variable.

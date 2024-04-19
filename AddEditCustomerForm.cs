@@ -12,19 +12,19 @@ using System.Windows.Forms;
 
 namespace jordan_rowland_c969
 {
-    public partial class AddEditCustomer : Form
+    public partial class AddEditCustomerForm : Form
     {
         bool EditMode = false;
         int customerId { get; set; }
         Global g { get; set; }
 
-        public AddEditCustomer(Global global)
+        public AddEditCustomerForm(Global global)
         {
             g = global;
             InitializeComponent();
         }
 
-        public AddEditCustomer(Global global, Services.Customer customer)
+        public AddEditCustomerForm(Global global, Services.Customer customer)
         {
             g = global;
             InitializeComponent();

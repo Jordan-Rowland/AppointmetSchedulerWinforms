@@ -44,6 +44,9 @@
             this.btn_Exit = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.dt_Date = new System.Windows.Forms.DateTimePicker();
+            this.button1 = new System.Windows.Forms.Button();
+            this.cbo_ReportType = new System.Windows.Forms.ComboBox();
+            this.label3 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dg_Customers)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dg_Appointments)).BeginInit();
             this.SuspendLayout();
@@ -216,11 +219,46 @@
             this.dt_Date.Size = new System.Drawing.Size(147, 30);
             this.dt_Date.TabIndex = 41;
             // 
+            // button1
+            // 
+            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button1.Location = new System.Drawing.Point(562, 10);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(144, 40);
+            this.button1.TabIndex = 42;
+            this.button1.Text = "Generate";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // cbo_ReportType
+            // 
+            this.cbo_ReportType.DisplayMember = "Text";
+            this.cbo_ReportType.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbo_ReportType.FormattingEnabled = true;
+            this.cbo_ReportType.Location = new System.Drawing.Point(234, 13);
+            this.cbo_ReportType.Name = "cbo_ReportType";
+            this.cbo_ReportType.Size = new System.Drawing.Size(322, 33);
+            this.cbo_ReportType.TabIndex = 43;
+            this.cbo_ReportType.ValueMember = "Id";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(12, 20);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(192, 29);
+            this.label3.TabIndex = 44;
+            this.label3.Text = "Generate Report";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1073, 785);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.cbo_ReportType);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.dt_Date);
             this.Controls.Add(this.btn_Exit);
             this.Controls.Add(this.txt_User);
@@ -265,6 +303,9 @@
         private System.Windows.Forms.Button btn_Exit;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.DateTimePicker dt_Date;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.ComboBox cbo_ReportType;
+        private System.Windows.Forms.Label label3;
     }
 }
 

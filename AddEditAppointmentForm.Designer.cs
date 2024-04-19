@@ -1,6 +1,6 @@
 ﻿namespace jordan_rowland_c969
 {
-    partial class AddEditAppointment
+    partial class AddEditAppointmentForm
     {
         /// <summary>
         /// Required designer variable.
@@ -254,7 +254,7 @@
             this.cbo_Type.TabIndex = 45;
             this.cbo_Type.ValueMember = "ID";
             // 
-            // AddEditAppointment
+            // AddEditAppointmentForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -280,7 +280,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.btn_Save);
             this.Controls.Add(this.btn_Cancel);
-            this.Name = "AddEditAppointment";
+            this.Name = "AddEditAppointmentForm";
             this.Text = "AddEditAppointment";
             this.Load += new System.EventHandler(this.AddEditAppointment_Load);
             this.ResumeLayout(false);

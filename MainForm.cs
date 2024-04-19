@@ -32,8 +32,16 @@ namespace jordan_rowland_c969
             InitializeComponent();
             txt_User.Text = $"Logged in as: {Global.User.Username}";
 
-            FillDataGrid(dg_Customers, "customer", "SELECT * FROM customer;");
-            FillDataGrid(dg_Appointments, "appointment", "SELECT * FROM appointment;");
+            // Write better queries - ALSO check all queries for correct parameters
+            FormHelpers.FillDataGrid(dg_Customers, new MySqlDataAdapter("SELECT * FROM customer;", DBInit.Conn));
+            FormHelpers.FillDataGrid(dg_Appointments, new MySqlDataAdapter("SELECT * FROM appointment;", DBInit.Conn));
+
+            cbo_ReportType.DataSource = new ComboItem[]
+            {
+                new ComboItem{ Id = 1, Text = "Appointment Types Per Month" },
+                new ComboItem{ Id = 2, Text = "User Schedules" },
+                new ComboItem{ Id = 3, Text = "Interview" },
+            };
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -41,67 +49,26 @@ namespace jordan_rowland_c969
 
         }
 
-        private void FillDataGrid(DataGridView dataGrid, string table, string query)
-        {
-            // Make better queries, not just everything
-            MySqlDataAdapter adp = new MySqlDataAdapter(query, DBInit.Conn);
-
-            DataTable dt;
-            dt = new DataTable();
-            adp.Fill(dt);
-            BindingSource bs = new BindingSource();
-            bs.DataSource = dt;
-            dataGrid.DataSource = bs;
-
-            ConvertDTFieldsToLocal(table, dt);
-
-            dataGrid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGrid.AllowUserToAddRows = false;
-            dataGrid.ReadOnly = true;
-            dataGrid.MultiSelect = false;
-        }
-
-        private static void ConvertDTFieldsToLocal(string table, DataTable dt)
-        {
-            string[] dtFields = new string[0];
-
-            if (table == "customer") dtFields = new string[] { "createDate", "lastUpdate" };
-            else if (table == "appointment") dtFields = new string[]
-            {
-                "start", "end", "createDate", "lastUpdate"
-            };
-            
-            Debug.WriteLine(TimeZoneInfo.Local);
-            foreach (DataRow row in dt.Rows)
-            {
-                foreach (string field in dtFields)
-                {
-                    row[field] = TimeZoneInfo.ConvertTimeFromUtc(
-                        (DateTime)row[field], TimeZoneInfo.Local
-                    );
-                }
-            }
-        }
 
         private void btn_Exit_Click(object sender, EventArgs e) => Close();
+
 
         private void btn_AddCustomer_Click(object sender, EventArgs e)
         {
             // phone number should only have digits and dashes
-            AddEditCustomer addEditCustomer = new AddEditCustomer(Global);
+            AddEditCustomerForm addEditCustomer = new AddEditCustomerForm(Global);
             addEditCustomer.ShowDialog();
-            FillDataGrid(dg_Customers, "customer", "SELECT * FROM customer;");
+            FormHelpers.FillDataGrid(dg_Customers, new MySqlDataAdapter("SELECT * FROM customer;", DBInit.Conn));
         }
 
         private void btn_UpdateCustomer_Click(object sender, EventArgs e)
         {
-            // Get customer and pass in to form
             // phone number should only have digits and dashes
             int id = (int)dg_Customers.SelectedRows[0].Cells["customerId"].Value;
             Services.Customer customer = Services.Customer.GetCustomer(id);
-            AddEditCustomer addEditCustomer = new AddEditCustomer(Global, customer);
+            AddEditCustomerForm addEditCustomer = new AddEditCustomerForm(Global, customer);
             addEditCustomer.ShowDialog();
-            FillDataGrid(dg_Customers, "customer", "SELECT * FROM customer;");
+            FormHelpers.FillDataGrid(dg_Customers, new MySqlDataAdapter("SELECT * FROM customer;", DBInit.Conn));
         }
 
         private void btn_DeleteCustomer_Click(object sender, EventArgs e)
@@ -116,7 +83,7 @@ namespace jordan_rowland_c969
                 DialogResult result;
                 result = MessageBox.Show(message, caption, buttons);
                 if (result == DialogResult.Yes) Services.Customer.Delete(id);
-                FillDataGrid(dg_Customers, "customer", "SELECT * FROM customer;");
+                FormHelpers.FillDataGrid(dg_Customers, new MySqlDataAdapter("SELECT * FROM customer;", DBInit.Conn));
             }
             catch (Exception ex)
             {
@@ -129,9 +96,9 @@ namespace jordan_rowland_c969
         {
             try
             {
-                AddEditAppointment addEditAppointment = new AddEditAppointment(Global);
+                AddEditAppointmentForm addEditAppointment = new AddEditAppointmentForm(Global);
                 addEditAppointment.ShowDialog();
-                FillDataGrid(dg_Appointments, "appointment", "SELECT * FROM appointment;");
+                FormHelpers.FillDataGrid(dg_Appointments, new MySqlDataAdapter("SELECT * FROM appointment;", DBInit.Conn));
             }
             catch (Exception ex)
             { // Maybe this should go in the AddEditAppointment form so the form doesn't close prematurely on an error
@@ -141,12 +108,11 @@ namespace jordan_rowland_c969
 
         private void btn_UpdateAppointment_Click(object sender, EventArgs e)
         {
-            // Get appointment and pass in to form
             int id = (int)dg_Appointments.SelectedRows[0].Cells["appointmentId"].Value;
             Services.Appointment appointment = Services.Appointment.GetAppointment(id);
-            AddEditAppointment addEditAppointment = new AddEditAppointment(Global, appointment);
+            AddEditAppointmentForm addEditAppointment = new AddEditAppointmentForm(Global, appointment);
             addEditAppointment.ShowDialog();
-            FillDataGrid(dg_Appointments, "appointment", "SELECT * FROM appointment;");
+            FormHelpers.FillDataGrid(dg_Appointments, new MySqlDataAdapter("SELECT * FROM appointment;", DBInit.Conn));
         }
 
         private void btn_DeleteAppointment_Click(object sender, EventArgs e)
@@ -154,6 +120,7 @@ namespace jordan_rowland_c969
 
             try
             {
+                // SelectedRows.Any() should solve an issue if nothing is selected.
                 int id = (int)dg_Appointments.SelectedRows[0].Cells["AppointmentId"].Value;
                 string message = "Delete Apointment?";
                 string caption = "Click Yes or No to confirm";
@@ -161,7 +128,7 @@ namespace jordan_rowland_c969
                 DialogResult result;
                 result = MessageBox.Show(message, caption, buttons);
                 if (result == DialogResult.Yes) Services.Appointment.Delete(id);
-                FillDataGrid(dg_Appointments, "appointment", "SELECT * FROM appointment;");
+                FormHelpers.FillDataGrid(dg_Appointments, new MySqlDataAdapter("SELECT * FROM appointment;", DBInit.Conn));
             }
             catch
             {
@@ -173,7 +140,7 @@ namespace jordan_rowland_c969
 
         private void btn_All_Click(object sender, EventArgs e)
         {
-            FillDataGrid(dg_Appointments, "appointment", "SELECT * FROM appointment;");
+            FormHelpers.FillDataGrid(dg_Appointments, new MySqlDataAdapter("SELECT * FROM appointment;", DBInit.Conn));
         }
 
         private void btn_Monthly_Click(object sender, EventArgs e)
@@ -182,28 +149,31 @@ namespace jordan_rowland_c969
             DateTime now = DateTime.UtcNow;
             string month = now.Month < 10 ? $"0{now.Month}" : now.Month.ToString();
             string query = $"SELECT * FROM appointment WHERE start LIKE '{now.Year}-{month}%' ;";
-            FillDataGrid(dg_Appointments, "appointment", query);
+            FormHelpers.FillDataGrid(
+                dg_Appointments,
+                new MySqlDataAdapter($"SELECT * FROM appointment WHERE start LIKE '{now.Year}-{month}%' ;", DBInit.Conn)
+            );
         }
 
         private void btn_Day_Click(object sender, EventArgs e)
         {
-            // Need to convert this to UTC before query
-            // This doesn't work for some reason. Need ot find out why
             DateTime selectedDay = TimeZoneInfo.ConvertTimeToUtc(DateTime.Parse(dt_Date.Text), TimeZoneInfo.Local);
-            //DateTime selectedDay = DateTime.Parse(dt_Date.Text);
+            FormHelpers.FillDataGrid(
+                dg_Appointments,
+                new MySqlDataAdapter(
+                    $"SELECT * FROM appointment WHERE start between " +
+                    $"DATE('{selectedDay.ToString("yyyy-MM-dd")}') " +
+                    $"AND DATE('{selectedDay.AddHours(24).ToString("yyyy-MM-dd")}') "
+                    , DBInit.Conn)
+                );
+        }
 
-            //selectedDay = selectedDay.AddDays(1);
-            Debug.WriteLine(TimeZoneInfo.Local);
-            Debug.WriteLine(DateTime.Parse(dt_Date.Text));
-            Debug.WriteLine(selectedDay);
-            Debug.WriteLine(selectedDay.ToString("yyyy-MM-dd"));
-            //DateTime selectedDay = DateTime.Parse(dt_Date.Text);
-            string query = (
-                $"SELECT * FROM appointment WHERE start between " +
-                $"DATE('{selectedDay.ToString("yyyy-MM-dd")}') " +
-                $"AND DATE('{selectedDay.AddHours(24).ToString("yyyy-MM-dd")}') "
-            );
-            FillDataGrid(dg_Appointments, "appointment", query);
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Debug.WriteLine(cbo_ReportType.ValueMember);
+            Debug.WriteLine(cbo_ReportType.DisplayMember);
+            ReportForm reportForm = new ReportForm(Global, (Convert.ToInt32(cbo_ReportType.SelectedValue), cbo_ReportType.Text)) ;
+            reportForm.ShowDialog();
         }
     }
 }

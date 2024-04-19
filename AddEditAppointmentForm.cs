@@ -6,13 +6,13 @@ using System.Windows.Forms;
 
 namespace jordan_rowland_c969
 {
-    public partial class AddEditAppointment : Form
+    public partial class AddEditAppointmentForm : Form
     {
         bool EditMode = false;
         int AppointmentId { get; set; }
         Global g { get; set; }
 
-        public AddEditAppointment(Global global)
+        public AddEditAppointmentForm(Global global)
         {
             InitializeComponent();
             g = global;
@@ -21,7 +21,7 @@ namespace jordan_rowland_c969
             ConfigureForm();
         }
 
-        public AddEditAppointment(Global global, Services.Appointment appointment)
+        public AddEditAppointmentForm(Global global, Services.Appointment appointment)
         {
             InitializeComponent();
             g = global;
@@ -50,10 +50,7 @@ namespace jordan_rowland_c969
             foreach (var c in customers) customerDataSource.Add(new ComboItem { Id = c.Id, Text = c.Name });
             cbo_Customer.DataSource = customerDataSource;
 
-            List<UserStruct> users = Database.User.GetUsers();
-            List<ComboItem> userDataSource = new List<ComboItem>();
-            foreach (var c in users) userDataSource.Add(new ComboItem { Id = c.Id, Text = c.Name });
-            cbo_User.DataSource = userDataSource;
+            cbo_User.DataSource = FormHelpers.GetUserDataSource();
 
             cbo_Type.DataSource = new ComboItem[]
             {
@@ -75,14 +72,10 @@ namespace jordan_rowland_c969
             Close();
         }
 
-        class ComboItem
-        {
-            public int Id { get; set; }
-            public string Text { get; set; }
-        }
 
         private void btn_Save_Click(object sender, EventArgs e)
         {
+            // In one instance, appt didn't seem to save. Ensure this works. 
             Services.Appointment appointment = new Services.Appointment()
             {
                 CustomerId = Convert.ToInt32(cbo_Customer.SelectedValue),
@@ -104,5 +97,6 @@ namespace jordan_rowland_c969
             else appointment.Create(g);
             Close();
         }
+
     }
 }
