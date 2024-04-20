@@ -26,7 +26,7 @@ namespace jordan_rowland_c969.Services
 
         public void Create(Global g)
         {
-            ValidateDates(DBAction.CREATE);
+            ValidateDates();
 
             try
             {
@@ -62,7 +62,7 @@ namespace jordan_rowland_c969.Services
 
         public void Update(Global g)
         {
-            ValidateDates(DBAction.UPDATE, this.AppointmentId);
+            ValidateDates(AppointmentId);
 
             try
             {
@@ -77,7 +77,6 @@ namespace jordan_rowland_c969.Services
 
         public static void Delete(int appointmentId)
         {
-
             try
             {
                 Database.Appointment.Delete(appointmentId);
@@ -90,7 +89,7 @@ namespace jordan_rowland_c969.Services
         }
 
 
-        public void ValidateDates(DBAction action, int? appointmentID = null)
+        public void ValidateDates(int? appointmentID = null)
         {
             TimeZoneInfo estZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
             DateTime utcStartTime = TimeZoneInfo.ConvertTimeToUtc(this.Start, TimeZoneInfo.Local);
@@ -101,25 +100,17 @@ namespace jordan_rowland_c969.Services
                 || estStartTime.Hour > 17
                 || estStartTime.DayOfWeek == DayOfWeek.Saturday
                 || estStartTime.DayOfWeek == DayOfWeek.Sunday
-                )
+            )
             {
                 throw new Exception("Cannot schedule outside of Monday - Friday, 9am - 5pm Eastern Time.");
             }
-            if (action == DBAction.CREATE)
+
+            if (Database.Appointment.GetOverlappingAppointments(utcStartTime, appointmentID ?? null))
             {
-                if (Database.Appointment.GetOverlappingAppointments(utcStartTime))
-                    throw new Exception(
-                        "There is already an appointment scheduled during this time.\n" +
-                        "Please select another time."
-                    );
-            }
-            else if (action == DBAction.UPDATE)
-            {
-                if (Database.Appointment.GetOverlappingAppointments(utcStartTime, appointmentID.Value))
-                    throw new Exception(
-                        "There is already an appointment scheduled during this time.\n" +
-                        "Please select another time."
-                    );
+                throw new Exception(
+                    "There is already an appointment scheduled during this time.\n" +
+                    "Please select another time."
+                );
             }
         }
 

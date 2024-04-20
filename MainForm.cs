@@ -11,17 +11,17 @@ namespace jordan_rowland_c969
     public partial class MainForm : Form
     {
 
-        Global Global { get; set; } = new Global() { User = ( 1, "test" ) };
+        Global Global { get; set; }
 
         public MainForm(Global global)
         {
             Global = global;
-            //using (LoginForm loginForm = new LoginForm(DBInit.Conn, Global))
-            //{
-            //    loginForm.ShowDialog();
-            //    if (!loginForm.LoginSuccessful) Environment.Exit(0);
-            //    Global = loginForm.Global;
-            //}
+            using (LoginForm loginForm = new LoginForm(DBInit.Conn, Global))
+            {
+                loginForm.ShowDialog();
+                if (!loginForm.LoginSuccessful) Environment.Exit(0);
+                Global = loginForm.Global;
+            }
 
             InitializeComponent();
             txt_User.Text = $"Logged in as: {Global.User.Username}";
