@@ -121,6 +121,9 @@ namespace jordan_rowland_c969.Services
                     );
         }
 
-        public static bool CheckUpcomingAppointments(int userId) => Database.Appointment.CheckUpcomingAppointments(userId);
+        public static (DateTime start, string name)? CheckUpcomingAppointments(int userId)
+        {
+            return Database.Appointment.CheckUpcomingAppointments(userId);
+        }
     }
 }

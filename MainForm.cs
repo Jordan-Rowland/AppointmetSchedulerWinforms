@@ -5,6 +5,9 @@ using MySql.Data.MySqlClient;
 
 using jordan_rowland_c969.Database;
 using System.Diagnostics;
+using jordan_rowland_c969.Services;
+using static Google.Protobuf.Reflection.SourceCodeInfo.Types;
+using System.Security.Policy;
 
 
 namespace jordan_rowland_c969
@@ -29,9 +32,16 @@ namespace jordan_rowland_c969
             InitializeComponent();
             txt_User.Text = $"Logged in as: {Global.User.Username}";
 
-            // Write better queries - ALSO check all queries for correct parameters
-            FormHelpers.FillDataGrid(dg_Customers, new MySqlDataAdapter("SELECT * FROM customer;", DBInit.Conn));
-            FormHelpers.FillDataGrid(dg_Appointments, new MySqlDataAdapter("SELECT * FROM appointment;", DBInit.Conn));
+            // check all queries for correct parameters
+
+            FormHelpers.FillDataGrid(
+                dg_Customers,
+                new MySqlDataAdapter(FormHelpers.Queries.CustomerMainQuery, DBInit.Conn)
+            );
+            FormHelpers.FillDataGrid(
+                dg_Appointments,
+                new MySqlDataAdapter(FormHelpers.Queries.AppointmentMainQuery, DBInit.Conn)
+            );
 
             cbo_ReportType.DropDownStyle = ComboBoxStyle.DropDownList;
             cbo_ReportType.DataSource = new ComboItem[]
@@ -45,8 +55,15 @@ namespace jordan_rowland_c969
 
         private void MainForm_Shown(object sender, EventArgs e)
         {
-            if (Services.Appointment.CheckUpcomingAppointments(Global.User.Id))
-                MessageBox.Show("You have an upcoming appointment within the next 15 minutes.");
+            (DateTime start, string name)? appointment = Services.Appointment.CheckUpcomingAppointments(Global.User.Id);
+            if (appointment.HasValue)
+            {
+                DateTime localStart = TimeZoneInfo.ConvertTimeFromUtc(appointment.Value.start, TimeZoneInfo.Local);
+                // Test this
+                MessageBox.Show(
+                    $"You have an upcoming appointment with {appointment.Value.name} at {localStart:hh:mm tt}"
+                );
+            }
         }
 
 
@@ -59,7 +76,7 @@ namespace jordan_rowland_c969
             {
                 AddEditCustomerForm addEditCustomer = new AddEditCustomerForm(Global);
                 addEditCustomer.ShowDialog();
-                FormHelpers.FillDataGrid(dg_Customers, new MySqlDataAdapter("SELECT * FROM customer;", DBInit.Conn));
+                FormHelpers.FillDataGrid(dg_Customers, new MySqlDataAdapter(FormHelpers.Queries.CustomerMainQuery, DBInit.Conn));
             }
             catch (Exception ex)
             {
@@ -82,7 +99,7 @@ namespace jordan_rowland_c969
                     addEditCustomer.ShowDialog();
                     FormHelpers.FillDataGrid(
                         dg_Customers,
-                        new MySqlDataAdapter("SELECT * FROM customer;", DBInit.Conn)
+                        new MySqlDataAdapter(FormHelpers.Queries.CustomerMainQuery, DBInit.Conn)
                     );
                 }
                 catch (Exception ex)
@@ -107,7 +124,7 @@ namespace jordan_rowland_c969
                     DialogResult result;
                     result = MessageBox.Show(message, caption, buttons);
                     if (result == DialogResult.Yes) Services.Customer.Delete(id);
-                    FormHelpers.FillDataGrid(dg_Customers, new MySqlDataAdapter("SELECT * FROM customer;", DBInit.Conn));
+                    FormHelpers.FillDataGrid(dg_Customers, new MySqlDataAdapter(FormHelpers.Queries.CustomerMainQuery, DBInit.Conn));
                 }
                 catch (Exception ex)
                 {
@@ -124,7 +141,10 @@ namespace jordan_rowland_c969
             {
                 AddEditAppointmentForm addEditAppointment = new AddEditAppointmentForm(Global);
                 addEditAppointment.ShowDialog();
-                FormHelpers.FillDataGrid(dg_Appointments, new MySqlDataAdapter("SELECT * FROM appointment;", DBInit.Conn));
+                FormHelpers.FillDataGrid(
+                    dg_Appointments,
+                    new MySqlDataAdapter(FormHelpers.Queries.AppointmentMainQuery, DBInit.Conn)
+                );
             }
             catch (Exception ex)
             {
@@ -143,7 +163,10 @@ namespace jordan_rowland_c969
                     Services.Appointment appointment = Services.Appointment.GetAppointment(id);
                     AddEditAppointmentForm addEditAppointment = new AddEditAppointmentForm(Global, appointment);
                     addEditAppointment.ShowDialog();
-                    FormHelpers.FillDataGrid(dg_Appointments, new MySqlDataAdapter("SELECT * FROM appointment;", DBInit.Conn));
+                    FormHelpers.FillDataGrid(
+                        dg_Appointments,
+                        new MySqlDataAdapter(FormHelpers.Queries.AppointmentMainQuery, DBInit.Conn)
+                    );
                 }
                 catch (Exception ex)
                 {
@@ -167,7 +190,10 @@ namespace jordan_rowland_c969
                     DialogResult result;
                     result = MessageBox.Show(message, caption, buttons);
                     if (result == DialogResult.Yes) Services.Appointment.Delete(id);
-                    FormHelpers.FillDataGrid(dg_Appointments, new MySqlDataAdapter("SELECT * FROM appointment;", DBInit.Conn));
+                    FormHelpers.FillDataGrid(
+                        dg_Appointments, 
+                        new MySqlDataAdapter(FormHelpers.Queries.AppointmentMainQuery, DBInit.Conn)
+                    );
                 }
                 catch (Exception ex)
                 {
@@ -180,7 +206,10 @@ namespace jordan_rowland_c969
 
         private void btn_All_Click(object sender, EventArgs e)
         {
-            FormHelpers.FillDataGrid(dg_Appointments, new MySqlDataAdapter("SELECT * FROM appointment;", DBInit.Conn));
+            FormHelpers.FillDataGrid(
+                dg_Appointments,
+                new MySqlDataAdapter(FormHelpers.Queries.AppointmentMainQuery, DBInit.Conn)
+            );
         }
 
 
@@ -189,10 +218,9 @@ namespace jordan_rowland_c969
             // Need to convert this to UTC before query
             DateTime now = DateTime.UtcNow;
             string month = now.Month < 10 ? $"0{now.Month}" : now.Month.ToString();
-            string query = $"SELECT * FROM appointment WHERE start LIKE '{now.Year}-{month}%' ;";
             FormHelpers.FillDataGrid(
                 dg_Appointments,
-                new MySqlDataAdapter($"SELECT * FROM appointment WHERE start LIKE '{now.Year}-{month}%' ;", DBInit.Conn)
+                new MySqlDataAdapter(FormHelpers.Queries.AppointmentMonthlyQuery(now, month), DBInit.Conn)
             );
         }
 
@@ -202,20 +230,15 @@ namespace jordan_rowland_c969
             DateTime selectedDay = TimeZoneInfo.ConvertTimeToUtc(DateTime.Parse(dt_Date.Text), TimeZoneInfo.Local);
             FormHelpers.FillDataGrid(
                 dg_Appointments,
-                new MySqlDataAdapter(
-                    $"SELECT * FROM appointment WHERE start between " +
-                    $"DATE('{selectedDay.ToString("yyyy-MM-dd")}') " +
-                    $"AND DATE('{selectedDay.AddHours(24).ToString("yyyy-MM-dd")}') "
-                    , DBInit.Conn)
-                );
+                new MySqlDataAdapter(FormHelpers.Queries.AppointmentDailyQuery(selectedDay), DBInit.Conn)
+            );
         }
 
 
         private void btn_Generate_Click(object sender, EventArgs e)
         {
-            Debug.WriteLine(cbo_ReportType.ValueMember);
-            Debug.WriteLine(cbo_ReportType.DisplayMember);
-            ReportForm reportForm = new ReportForm(Global, (Convert.ToInt32(cbo_ReportType.SelectedValue), cbo_ReportType.Text)) ;
+            ReportForm reportForm = new ReportForm(
+                Global, (Convert.ToInt32(cbo_ReportType.SelectedValue), cbo_ReportType.Text));
             reportForm.ShowDialog();
         }
 

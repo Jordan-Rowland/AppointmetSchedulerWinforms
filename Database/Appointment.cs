@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 
 using MySql.Data.MySqlClient;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 
 namespace jordan_rowland_c969.Database
@@ -228,14 +229,17 @@ namespace jordan_rowland_c969.Database
             return false;
         }
 
-        public static bool CheckUpcomingAppointments(int userId)
+        public static (DateTime start, string name)? CheckUpcomingAppointments(int userId)
         {
             DateTime utcNow = DateTime.UtcNow;
             DateTime utcNowPlus15 = utcNow.AddMinutes(15);
 
             MySqlCommand query = new MySqlCommand(
-                "SELECT * FROM appointment WHERE userId = @userId " +
-                "AND start > @utcNow AND start < @utcNowPlus15",
+                "SELECT a.start, c.customerName FROM appointment a " +
+                "INNER JOIN customer c on c.customerID = a.customerId " +
+                "WHERE userId = @userId " +
+                "AND start > @utcNow AND start < @utcNowPlus15 " +
+                "LIMIT 1 ",
             DBInit.Conn
             );
 
@@ -243,19 +247,14 @@ namespace jordan_rowland_c969.Database
             query.Parameters.Add("@utcNow", MySqlDbType.VarChar, 40).Value = utcNow.ToString("yyyy-MM-dd HH:mm:ss");
             query.Parameters.Add("@utcNowPlus15", MySqlDbType.VarChar, 40).Value = utcNowPlus15.ToString("yyyy-MM-dd HH:mm:ss");
 
-            Debug.WriteLine("SELECT * FROM appointment " +
-                $"WHERE userId = {userId} " +
-                $"AND start BETWEEN DATE('{utcNow.ToString("yyyy-MM-dd HH:mm:ss")}') " +
-                $"AND DATE('{utcNowPlus15.ToString("yyyy-MM-dd HH:mm:ss")}')");
-
             MySqlDataReader reader = query.ExecuteReader();
             if (reader.Read())
             {
                 reader.Close();
-                return true;
+                return (reader.GetDateTime(0), reader.GetString(1));
             }
             reader.Close();
-            return false;
+            return null;
         }
 
 
