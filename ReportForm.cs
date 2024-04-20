@@ -50,7 +50,7 @@ namespace jordan_rowland_c969
         }
 
 
-        private readonly Func<int, MySqlCommand> GetUserAppointmentsQuery = userId =>
+        private readonly Func<int, MySqlCommand> GetUserAppointmentsQuery = userId =>  // This lambda made abstracted this out of the code above for reuse
         {
             MySqlCommand query = new MySqlCommand(
                 "SELECT * FROM appointment WHERE userID = @userId",
@@ -61,9 +61,9 @@ namespace jordan_rowland_c969
         };
 
 
-        private readonly Func<string, string> GetReportName = report => $"Report: {report}";
+        private readonly Func<string, string> GetReportName = report => $"Report: {report}";  // This lambda gave a descriptive name to the functionality it employs
 
-        private readonly Func<string, MySqlDataAdapter> CreateReportAdapter = 
+        private readonly Func<string, MySqlDataAdapter> CreateReportAdapter =   // This lambda made this function more concicse and clear to read
             query => new MySqlDataAdapter(query, DBInit.Conn);
 
 

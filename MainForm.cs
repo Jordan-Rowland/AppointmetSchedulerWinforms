@@ -15,24 +15,20 @@ namespace jordan_rowland_c969
     public partial class MainForm : Form
     {
 
-        Global Global { get; set; } = new Global() { User = (2, "test2") };
-        //Global Global { get; set; }  // Keep this
+        Global Global { get; set; }
 
         public MainForm(Global global)
         {
-            // DO NOT DELETE, NEED ALL THIS
-            //Global = global;
-            //using (LoginForm loginForm = new LoginForm(DBInit.Conn, Global))
-            //{
-            //    loginForm.ShowDialog();
-            //    if (!loginForm.LoginSuccessful) Environment.Exit(0);
-            //    Global = loginForm.Global;
-            //}
+           Global = global;
+            using (LoginForm loginForm = new LoginForm(DBInit.Conn, Global))
+            {
+                loginForm.ShowDialog();
+                if (!loginForm.LoginSuccessful) Environment.Exit(0);
+                Global = loginForm.Global;
+            }
 
             InitializeComponent();
             txt_User.Text = $"Logged in as: {Global.User.Username}";
-
-            // check all queries for correct parameters
 
             FormHelpers.FillDataGrid(
                 dg_Customers,
@@ -59,7 +55,6 @@ namespace jordan_rowland_c969
             if (appointment.HasValue)
             {
                 DateTime localStart = TimeZoneInfo.ConvertTimeFromUtc(appointment.Value.start, TimeZoneInfo.Local);
-                // Test this
                 MessageBox.Show(
                     $"You have an upcoming appointment with {appointment.Value.name} at {localStart:hh:mm tt}"
                 );
@@ -89,8 +84,7 @@ namespace jordan_rowland_c969
         {
             if (dg_Customers.SelectedRows.Count >= 1)
             {
-                // Will need to update customerId when queries are updated
-                int id = (int)dg_Customers.SelectedRows[0].Cells["customerId"].Value;
+                int id = (int)dg_Customers.SelectedRows[0].Cells["Customer ID"].Value;
                 Services.Customer customer = Services.Customer.GetCustomer(id);
                 AddEditCustomerForm addEditCustomer = new AddEditCustomerForm(Global, customer);
 
@@ -117,7 +111,7 @@ namespace jordan_rowland_c969
             {
                 try
                 {
-                    int id = (int)dg_Customers.SelectedRows[0].Cells["CustomerId"].Value;
+                    int id = (int)dg_Customers.SelectedRows[0].Cells["Customer ID"].Value;
                     string message = "Delete customer?";
                     string caption = "Click Yes or No to confirm";
                     MessageBoxButtons buttons = MessageBoxButtons.YesNo;
@@ -159,7 +153,7 @@ namespace jordan_rowland_c969
             {
                 try
                 {
-                    int id = (int)dg_Appointments.SelectedRows[0].Cells["appointmentId"].Value;
+                    int id = (int)dg_Appointments.SelectedRows[0].Cells["Appointment ID"].Value;
                     Services.Appointment appointment = Services.Appointment.GetAppointment(id);
                     AddEditAppointmentForm addEditAppointment = new AddEditAppointmentForm(Global, appointment);
                     addEditAppointment.ShowDialog();
@@ -183,7 +177,7 @@ namespace jordan_rowland_c969
             {
                 try
                 {
-                    int id = (int)dg_Appointments.SelectedRows[0].Cells["AppointmentId"].Value;
+                    int id = (int)dg_Appointments.SelectedRows[0].Cells["Appointment ID"].Value;
                     string message = "Delete Apointment?";
                     string caption = "Click Yes or No to confirm";
                     MessageBoxButtons buttons = MessageBoxButtons.YesNo;
@@ -215,7 +209,6 @@ namespace jordan_rowland_c969
 
         private void btn_Monthly_Click(object sender, EventArgs e)
         {
-            // Need to convert this to UTC before query
             DateTime now = DateTime.UtcNow;
             string month = now.Month < 10 ? $"0{now.Month}" : now.Month.ToString();
             FormHelpers.FillDataGrid(

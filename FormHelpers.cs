@@ -6,7 +6,6 @@ using System.Diagnostics;
 using System.Windows.Forms;
 
 using MySql.Data.MySqlClient;
-using System.Drawing;
 
 
 namespace jordan_rowland_c969
@@ -16,7 +15,7 @@ namespace jordan_rowland_c969
         public static void ConvertDTFieldsToLocal(DataTable dt)
         {
 
-            string[] dtFields = new string[] { "start", "end", "createDate", "lastUpdate" };
+            string[] dtFields = new string[] { "Start Time", "End Time", "Creation Date", "Last Updated" };
             Debug.WriteLine(TimeZoneInfo.Local);
             foreach (DataRow row in dt.Rows)
             {
@@ -43,7 +42,6 @@ namespace jordan_rowland_c969
             dataGrid.AllowUserToAddRows = false;
             dataGrid.ReadOnly = true;
             dataGrid.MultiSelect = false;
-            //dataGrid.AutoResizeColumns();
         }
 
 
@@ -78,12 +76,13 @@ namespace jordan_rowland_c969
 
             public static string AppointmentMainQuery { get; } = (
                 "SELECT " +
-                "c.customerName Name, " +
-                "u.userName 'User Name', " +
-                "type 'Type', title 'Title', description 'Description', " +
-                "location 'Location', contact 'Contact', url 'Url', " +
-                "start 'Start Time', " +
-                "end 'End Time' " +
+                "a.appointmentID AS 'Appointment Id', " +
+                "c.customerName AS Name, " +
+                "u.userName AS 'User Name', " +
+                "type AS 'Type', title AS 'Title', description AS 'Description', " +
+                "location AS 'Location', contact AS 'Contact', url AS 'Url', " +
+                "start AS 'Start Time', " +
+                "end AS 'End Time' " +
                 "FROM appointment a " +
                 "INNER JOIN customer c on c.customerId = a.customerId " +
                 "INNER JOIN user u on u.userId = a.userId "

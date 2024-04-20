@@ -221,7 +221,6 @@ namespace jordan_rowland_c969.Database
             MySqlDataReader reader = query.ExecuteReader();
             if (reader.Read())
             {
-                Debug.WriteLine($"\n\nGOT ONE {reader.GetInt32(0)}\n\n");
                 reader.Close();
                 return true;
             }
@@ -265,10 +264,13 @@ namespace jordan_rowland_c969.Database
             query.Parameters.Add("@customerId", MySqlDbType.Int32).Value = customerId;
 
             MySqlDataReader reader = query.ExecuteReader();
-
-            if (reader.Read()) return true;
+            if (reader.Read())
+            {
+                reader.Close();
+                return true;
+            }
+            reader.Close();
             return false;
-
         }
     }
 

@@ -1,18 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Diagnostics;
-using System.Drawing;
-using System.Globalization;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using jordan_rowland_c969.Services;
+
 using MySql.Data.MySqlClient;
-using MySqlX.XDevAPI.Common;
+
+using jordan_rowland_c969.Services;
+
 
 namespace jordan_rowland_c969
 {
