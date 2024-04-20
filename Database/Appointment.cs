@@ -14,8 +14,6 @@ namespace jordan_rowland_c969.Database
         {
             MySqlCommand cmd = new MySqlCommand();
 
-            Debug.WriteLine(TimeZoneInfo.ConvertTimeToUtc(appointment.Start, TimeZoneInfo.Local));
-
             if (action == DBAction.CREATE)
             {
                 cmd = new MySqlCommand(
@@ -120,53 +118,6 @@ namespace jordan_rowland_c969.Database
             return appointment;
         }
 
-        public static List<AppointmentStruct> GetAppointments()
-        {
-            MySqlCommand query = new MySqlCommand(
-                "SELECT " +
-                "a.appointmentID " +
-                ", a.customerId" +
-                ", a.userId" +
-                ", title" +
-                ", description" +
-                ", location" +
-                ", contact" +
-                ", type" +
-                ", url" +
-                ", start" +
-                ", u.userName" +
-                ", c.customerName " +
-                "FROM appointment a " +
-                "INNER JOIN user u on u.userId = a.userId " +
-                "INNER JOIN customer c on c.customerId = a.customerId " +
-                DBInit.Conn
-            );
-
-            MySqlDataReader reader = query.ExecuteReader();
-            List<AppointmentStruct> appointments = new List<AppointmentStruct>();
-            while (reader.Read())
-            {
-                appointments.Add(new AppointmentStruct()
-                {
-                    AppointmentId = reader.GetInt32(0),
-                    CustomerId = reader.GetInt32(1),
-                    UserId = reader.GetInt32(2),
-                    Title = reader.GetString(3),
-                    Description = reader.GetString(4),
-                    Location = reader.GetString(5),
-                    Contact = reader.GetString(6),
-                    Type = reader.GetString(7),
-                    Url = reader.GetString(8),
-                    Start = reader.GetDateTime(9),
-                    UserName = reader.GetString(10),
-                    CustomerName = reader.GetString(11),
-                });
-
-            }
-            reader.Close();
-            return appointments;
-        }
-
 
         public static void Delete(int appointmentId)
         {
@@ -179,19 +130,26 @@ namespace jordan_rowland_c969.Database
         }
 
 
-        public static bool GetOverlappingAppointments(DateTime utcStartTime)
+        public static bool GetOverlappingAppointments(DateTime utcStartTime, int? appointmentID = null)
         {
             string strStartTime = utcStartTime.ToString("yyyy-MM-dd HH:mm:ss");
             string strEndTime = utcStartTime.AddMinutes(45).ToString("yyyy-MM-dd HH:mm:ss");
 
-            MySqlCommand query = new MySqlCommand(
-                $"SELECT * FROM appointment WHERE (" +
-                $"start < '{strStartTime}' AND '{strStartTime}' < end" +
-                $") OR (" +
-                $"start < '{strEndTime}' AND '{strEndTime}' < end" +
-                $")",
-                DBInit.Conn
-            );
+            string queryString = 
+                "SELECT * FROM appointment WHERE (" +
+                "start < @strStartTime AND @strStartTime < end " +
+                ") OR (" +
+                "start < @strEndTime AND @strEndTime < end " +
+                ") ";
+
+            if (appointmentID.HasValue) queryString += "AND appointmentId != @appointmentID";
+
+            MySqlCommand query = new MySqlCommand(queryString, DBInit.Conn);
+            query.Parameters.Add("@strStartTime", MySqlDbType.VarChar, 50).Value = strStartTime;
+            query.Parameters.Add("@strEndTime", MySqlDbType.VarChar, 50).Value = strEndTime;
+
+            if (appointmentID.HasValue)
+                query.Parameters.Add("@appointmentId", MySqlDbType.Int32).Value = appointmentID.Value;
 
             MySqlDataReader reader = query.ExecuteReader();
             if (reader.Read())
@@ -203,30 +161,6 @@ namespace jordan_rowland_c969.Database
             return false;
         }
 
-
-        public static bool GetOverlappingAppointments(DateTime utcStartTime, int appointmentID)
-        {
-            string strStartTime = utcStartTime.ToString("yyyy-MM-dd HH:mm:ss");
-            string strEndTime = utcStartTime.AddMinutes(45).ToString("yyyy-MM-dd HH:mm:ss");
-
-            MySqlCommand query = new MySqlCommand(
-                $"SELECT start, end FROM appointment WHERE ((" +
-                $"start < '{strStartTime}' AND '{strStartTime}' < end" +
-                $") OR (" +
-                $"start < '{strEndTime}' AND '{strEndTime}' < end" +
-                $")) AND appointmentId != {appointmentID}",
-                DBInit.Conn
-            );
-
-            MySqlDataReader reader = query.ExecuteReader();
-            if (reader.Read())
-            {
-                reader.Close();
-                return true;
-            }
-            reader.Close();
-            return false;
-        }
 
         public static (DateTime start, string name)? CheckUpcomingAppointments(int userId)
         {
@@ -249,8 +183,10 @@ namespace jordan_rowland_c969.Database
             MySqlDataReader reader = query.ExecuteReader();
             if (reader.Read())
             {
+                DateTime apptTime = reader.GetDateTime(0);
+                string apptName = reader.GetString(1);
                 reader.Close();
-                return (reader.GetDateTime(0), reader.GetString(1));
+                return (apptTime, apptName);
             }
             reader.Close();
             return null;

@@ -4,10 +4,6 @@ using System.Windows.Forms;
 using MySql.Data.MySqlClient;
 
 using jordan_rowland_c969.Database;
-using System.Diagnostics;
-using jordan_rowland_c969.Services;
-using static Google.Protobuf.Reflection.SourceCodeInfo.Types;
-using System.Security.Policy;
 
 
 namespace jordan_rowland_c969
@@ -15,17 +11,17 @@ namespace jordan_rowland_c969
     public partial class MainForm : Form
     {
 
-        Global Global { get; set; }
+        Global Global { get; set; } = new Global() { User = ( 1, "test" ) };
 
         public MainForm(Global global)
         {
-           Global = global;
-            using (LoginForm loginForm = new LoginForm(DBInit.Conn, Global))
-            {
-                loginForm.ShowDialog();
-                if (!loginForm.LoginSuccessful) Environment.Exit(0);
-                Global = loginForm.Global;
-            }
+            Global = global;
+            //using (LoginForm loginForm = new LoginForm(DBInit.Conn, Global))
+            //{
+            //    loginForm.ShowDialog();
+            //    if (!loginForm.LoginSuccessful) Environment.Exit(0);
+            //    Global = loginForm.Global;
+            //}
 
             InitializeComponent();
             txt_User.Text = $"Logged in as: {Global.User.Username}";
@@ -54,9 +50,12 @@ namespace jordan_rowland_c969
             (DateTime start, string name)? appointment = Services.Appointment.CheckUpcomingAppointments(Global.User.Id);
             if (appointment.HasValue)
             {
-                DateTime localStart = TimeZoneInfo.ConvertTimeFromUtc(appointment.Value.start, TimeZoneInfo.Local);
+                DateTime localStart = TimeZoneInfo.ConvertTimeFromUtc(
+                    appointment.Value.start, TimeZoneInfo.Local
+                );
                 MessageBox.Show(
-                    $"You have an upcoming appointment with {appointment.Value.name} at {localStart:hh:mm tt}"
+                    $"You have an upcoming appointment with {appointment.Value.name} " +
+                    $"at {localStart:hh:mm tt}."
                 );
             }
         }

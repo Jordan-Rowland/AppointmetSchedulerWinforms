@@ -96,7 +96,6 @@ namespace jordan_rowland_c969.Services
             DateTime utcStartTime = TimeZoneInfo.ConvertTimeToUtc(this.Start, TimeZoneInfo.Local);
             DateTime estStartTime = TimeZoneInfo.ConvertTimeFromUtc(utcStartTime, estZone);
 
-
             if (
                 estStartTime.Hour < 9
                 || estStartTime.Hour > 17
@@ -107,17 +106,21 @@ namespace jordan_rowland_c969.Services
                 throw new Exception("Cannot schedule outside of Monday - Friday, 9am - 5pm Eastern Time.");
             }
             if (action == DBAction.CREATE)
+            {
                 if (Database.Appointment.GetOverlappingAppointments(utcStartTime))
                     throw new Exception(
                         "There is already an appointment scheduled during this time.\n" +
                         "Please select another time."
                     );
+            }
             else if (action == DBAction.UPDATE)
-                if (Database.Appointment.GetOverlappingAppointments(utcStartTime))
+            {
+                if (Database.Appointment.GetOverlappingAppointments(utcStartTime, appointmentID.Value))
                     throw new Exception(
                         "There is already an appointment scheduled during this time.\n" +
                         "Please select another time."
                     );
+            }
         }
 
         public static (DateTime start, string name)? CheckUpcomingAppointments(int userId)

@@ -16,7 +16,6 @@ namespace jordan_rowland_c969
         {
 
             string[] dtFields = new string[] { "Start Time", "End Time", "Creation Date", "Last Updated" };
-            Debug.WriteLine(TimeZoneInfo.Local);
             foreach (DataRow row in dt.Rows)
             {
                 foreach (string field in dtFields)
@@ -70,6 +69,7 @@ namespace jordan_rowland_c969
                 "INNER JOIN address a on a.addressID = cu.addressId " +
                 "INNER JOIN city ci on ci.cityId = a.cityId " +
                 "INNER JOIN country co on co.countryID = ci.countryId " +
+                "ORDER BY 1 DESC" +
                 ";"
             );
 
@@ -85,7 +85,9 @@ namespace jordan_rowland_c969
                 "end AS 'End Time' " +
                 "FROM appointment a " +
                 "INNER JOIN customer c on c.customerId = a.customerId " +
-                "INNER JOIN user u on u.userId = a.userId "
+                "INNER JOIN user u on u.userId = a.userId " +
+                "ORDER BY 1 DESC" +
+                ";"
             );
 
 
